@@ -1,59 +1,16 @@
 <!DOCTYPE html>
 <html class="ocks-org do-not-copy">
-<head>
-        <meta name="viewport" content="width=device-width, user-scalable=no">
-	<meta charset="utf-8" http-equiv="X-UA-Compatible" content="chrome=1, IE=edge">
+  <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<title>Star Cluster Evolution, From Birth to Today</title>
 	<style>
 	@import url(style.css?aea6f0a);
 
-	body {
-	 width:960px;
-	}
-
-	.button { 
-	 height:50px;
-	 width:150px;
-	 font-size:25px;
-	 font-family:Helvetica Neue; 
-	 font: Helvetica Neue;
-	}
-
-	#chart {
-	  margin-top: 0px;
-	  margin-left: 0px;
-	  height: 600px;
-	  width: 320px;
-	}
-
-	#chartmap {
-	  margin-top: 0px;
-	  margin-left: 0px;
-	  height: 600px;
-	  width: 200px;
-	}
-
-	#clock-buttons-td {
-	  margin-top: 0px;
-	  margin-left: 0px;
-	  height: 600px;
-	  width: 300px;
-	}
-
-	#WWT {
-	  margin-top: 0px;
-	  margin-left: 0px;
-	  width: 280px;
-	  height: 600px;
-	}
-
-	#radiusLegend {
-	  margin-left: 0px;
-	  height: 60px;
-	}
-
 	text {
-	  font-size: 16px;
+	  font-size: 100%;
 	  fill: yellow;
 	}
 
@@ -73,13 +30,13 @@
 	}
 
 	.yearLabel {
-	  font-size: 25px;
+	  font-size: 150%;
 	  fill: black;
 	  font-weight: bold;
 	}
 
 	.yearLabel.active {
-	  font-size: 25px;
+	  font-size: 150%;
 	  fill: red;
 	  font-weight: bold;
 	}
@@ -88,7 +45,7 @@
 	  pointer-events: all;
 	  cursor: ew-resize;
 	  fill: transparent;
-	  font-size: 25px;
+	  font-size: 150%;
 	}
 
 	.second-hand{
@@ -105,11 +62,11 @@
 	}
 
 	.second-label{
-	font-size: 12px;
+	font-size: 100%;
 	}
 
 	.hour-label{
-	font-size: 24px;
+	font-size: 150%;
 	}
 
 	</style>
@@ -117,101 +74,106 @@
 	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
 	<script src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>
 	<script>
-		 // declare global Worldwide Telescope object
-		 var wwt;
-		 // Create variables to hold the changeable settings
-		 var bShowCrosshairs = true;
-		var bShowUI = true;
-		var bShowFigures = true;
-		 // This function initializes the wwt object and once it is done
-		// it fires the wwtReady event
-		 function initialize() {
-		    wwt = wwtlib.WWTControl.initControl("WWTCanvas");
-		    wwt.add_ready(wwtReady);
-		 // This ensures that events that would have fired before we registered them get fired
-		    wwt.endInit();
-		}
-		 // This function is where you would put your custom code for WWT
-		// following the initForWwt() call
-		 function wwtReady() {
-		    initForWwt();
-
-		}
-		 // This is the initialization for Worldwide Telescope
-		 function initForWwt() {
-		    wwt.loadImageCollection("http://www.worldwidetelescope.org/COMPLETE/wwtcomplete.wtml");
-		     // add any wwt object settings changes here
-		    wwt.settings.set_showCrosshairs(bShowCrosshairs);
-		    wwt.settings.set_showConstellationFigures(bShowFigures);
-		    wwt.hideUI(!bShowUI);
-		}
-		 // A simple function to toggle the settings
-		// This function is called from the checkbox entries setup in the html table
-		 function toggleSetting(text) {
-		    switch (text) {
-			case 'ShowUI':
-			    bShowUI = !bShowUI;
-			    wwt.hideUI(!bShowUI);
-			    wwt.set_showExplorerUI(bShowUI);
-			    break;
-			 case 'ShowCrosshairs':
-			    bShowCrosshairs = !bShowCrosshairs;
-			    wwt.settings.set_showCrosshairs(bShowCrosshairs);
-			    break;
-			 case 'ShowFigures':
-			    bShowFigures = !bShowFigures;
-			    wwt.settings.set_showConstellationFigures(bShowFigures);
-			    break;
-		    }
-		}
-		 // A function to change the view to different constellations
-		// Note the fov set to 60 (maximum view distance)
-		// This function is called from the button entries in the html table
-
-		function GotoConstellation(d) {
-		     wwt.gotoRaDecZoom(d.ra*15, d.dec, d.zoom/2, false);
-		}
+	  // declare global Worldwide Telescope object
+	  var wwt;
+	  // Create variables to hold the changeable settings
+	  var bShowCrosshairs = true;
+	  var bShowUI = true;
+	  var bShowFigures = true;
+	  // This function initializes the wwt object and once it is done
+	  // it fires the wwtReady event
+	  function initialize() {
+	  wwt = wwtlib.WWTControl.initControl("WWTCanvas");
+	  wwt.add_ready(wwtReady);
+	  // This ensures that events that would have fired before we registered them get fired
+	  wwt.endInit();
+	  }
+	  // This function is where you would put your custom code for WWT
+	  // following the initForWwt() call
+	  function wwtReady() {
+	  initForWwt();
+	  
+	  }
+	  // This is the initialization for Worldwide Telescope
+	  function initForWwt() {
+	  wwt.loadImageCollection("http://www.worldwidetelescope.org/COMPLETE/wwtcomplete.wtml");
+	  // add any wwt object settings changes here
+	  wwt.settings.set_showCrosshairs(bShowCrosshairs);
+	  wwt.settings.set_showConstellationFigures(bShowFigures);
+	  wwt.hideUI(!bShowUI);
+	  }
+	  // A simple function to toggle the settings
+	  // This function is called from the checkbox entries setup in the html table
+	  function toggleSetting(text) {
+	  switch (text) {
+	  case 'ShowUI':
+	  bShowUI = !bShowUI;
+	  wwt.hideUI(!bShowUI);
+	  wwt.set_showExplorerUI(bShowUI);
+	  break;
+	  case 'ShowCrosshairs':
+	  bShowCrosshairs = !bShowCrosshairs;
+	  wwt.settings.set_showCrosshairs(bShowCrosshairs);
+	  break;
+	  case 'ShowFigures':
+	  bShowFigures = !bShowFigures;
+	  wwt.settings.set_showConstellationFigures(bShowFigures);
+	  break;
+	  }
+	  }
+	  // A function to change the view to different constellations
+	  // Note the fov set to 60 (maximum view distance)
+	  // This function is called from the button entries in the html table
+	  
+	  function GotoConstellation(d) {
+	  wwt.gotoRaDecZoom(d.ra*15, d.dec, d.zoom/2, false);
+	  }
 	</script>
 </head>
-<body style="background-color:white;width:960px;" >
-<div id="wrapper">
-<h1 style="color:black;">Star Cluster Evolution, From Birth to Today</h1>
-<table>
-   <tr id="table">
-      <td id="chart">
-         <h2 href="#" id="chart-title" title="Astronomers use H-R diagrams of real star clusters to study the stars' ages, distances and chemical compositions. An H-R diagram, or Hertzsprung–Russell diagram, plots the stellar surface temperatures (bluer is hotter and towards the left on the plot) against the stellar luminosities (brighter is towards the top of the plot). Our Sun has a surface temperature of about 5,800 Kelvin and a luminosity of 1 in these units.">H-R diagram</h2>
-      </td>
-      <td id="chartmap">
-         <h2 href="#" id="chartmap-title" title="Here you see a projection of the positions of the stars in space, tracking the cluster as it orbits around the Galaxy. In this simulation the Galactic center is towards the left of the screen, and the cluster's orbit is aligned roughly with the vertical direction." >Spatial coordinates plot</h2>
-      </td>
-      <td id="clock-buttons-td" align="middle;">
-         <div id="clock-buttons-div" class="svg-container">
-            <svg id="clock-buttons-svg" style="height:300px;width=200px">
-               <g id="clock-group"></g>
-               <table>
-                     <th colspan = "3">
-                     <g id="buttons-group" align="middle;"></g>
-               </table>
-            </svg>
-         </div>
-      </td>
-      <td id="WWT;" color="white;">
-         <h2 id="WorldWideTelescopeControlHost" title="You can explore real images of stars in this window. You can zoom in and out (using the Page-Up and Page-Down keys on your keyboard or the scroll wheel on your mouse). You can move your view (by clicking and moving your mouse in the main window). You can also rotate the view (by holding down the control key while you move your mouse)."></h2>
-         <div id="WWTCanvas" style="color:black;width:400px;height:600px"></div>
-      </td>
-   </tr>  
-</table>   
-<table>
-   <tr>
-     <td id="radiusLegend">
-     </td>
-     <td id="radiusLegend2">
-     <p style="color:grey;width:100%;font-size:15px;"> <span style="color:red;">Mouseover the year under the clock to move forward and backwards through time. <br>Mouseover the plot to see a description and each star to see their properties. <br>Click on one of the clock ticks to visualize the HR diagram corresponding to a real constellation of the specified age: an image of the same costellation in the World Wide Telescope will appear on the right.
-     </td>
-   </tr>
-   
-</table>
-<p style="color:black;width:100%;font-size:20px;"> 
+<body style="background-color:white;">
+  <div class="container">
+    <h1 style="color:black;">Star Cluster Evolution, From Birth to Today</h1>
+    <div class="row">
+      <div class="col-md-4">
+	<div class="row" id="chart-h2">
+	<h2 href="#" id="chart-title" title="Astronomers use H-R diagrams of real star clusters to study the stars' ages, distances and chemical compositions. An H-R diagram, or Hertzsprung–Russell diagram, plots the stellar surface temperatures (bluer is hotter and towards the left on the plot) against the stellar luminosities (brighter is towards the top of the plot). Our Sun has a surface temperature of about 5,800 Kelvin and a luminosity of 1 in these units.">H-R diagram</h2>
+	</div>
+	<div class="row" id="chart">
+	</div>
+
+      </div>
+      <div class="col-md-2">
+	<div class="row" id="chartmap-h2">
+	<h2 href="#" id="chartmap-title" title="Here you see a projection of the positions of the stars in space, tracking the cluster as it orbits around the Galaxy. In this simulation the Galactic center is towards the left of the screen, and the cluster's orbit is aligned roughly with the vertical direction.">Spatial coordinates plot</h2>
+	</div>
+	<div class="row" id="chartmap">
+	</div>
+      </div>
+      <div class="col-md-2" id="clock-buttons-td-h2">
+	<svg id="clock-buttons-svg">
+	  <g id="clock-group"></g>
+	  <br><br>
+	  <div class="btn-group-vertical" id="buttons-group">
+	  </div>
+	</svg>
+      </div>
+      <div class="col-md-4">
+	<div class="row" id="WWT" style="color:black;width:100%;height:100%">
+	<h2 id="WorldWideTelescopeControlHost" title="You can explore real images of stars in this window. You can zoom in and out (using the Page-Up and Page-Down keys on your keyboard or the scroll wheel on your mouse). You can move your view (by clicking and moving your mouse in the main window). You can also rotate the view (by holding down the control key while you move your mouse)."></h2>
+	</div>
+	<div class="row" id="WWTCanvas" style="color:black;width:100%;height:100%;">
+	</div>
+      </div>
+    </div>
+  
+
+    <div class="row">
+      <div class="col-md-6" id="radiusLegend"></div>
+      <div class="col-md-6" id="radiusLegend2">
+	<p style="color:grey;width:100%;font-size:100%;"> <span style="color:red;">Mouseover the year under the clock to move forward and backwards through time. <br>Mouseover the plot to see a description and each star to see their properties. <br>Click on one of the clock ticks to visualize the HR diagram corresponding to a real constellation of the specified age: an image of the same costellation in the World Wide Telescope will appear on the right.
+      </div>
+    </div>
+    <p style="color:black;width:100%;font-size:125%;"> 
 Our Sun likely formed in a small cluster of stars that dissolved many years ago.  Here you can interact with a computer simulation of a 100-star cluster similar 
 to our Sun's birthplace, as it evolves in time from birth until the present day (at an age of 5 billion years). <br>
 
@@ -225,7 +187,7 @@ similar to those observed in real dissolving star clusters. You may also notice 
 due to large kicks imparted by the stars' very energetic supernovae explosions.  Our Sun likely escaped from its birth cluster like 
 the majority of the stars in this simulation: slowly and calmly, and eventually leaving its sibling to live out its life in isolation--which was good news for us!
 </p>
-<p style="color:black;font-width:bold;font-size:20px;">Credits: This plot has been created using <a href="http://d3js.org/">D3</a>  inspired by <a href="http://bost.ocks.org/mike/nations/">http://bost.ocks.org/mike/nations/</a> and uses <a href="http://www.worldwidetelescope.org/">the World Wide Telescope</a>. Data simulated by Aaron M. Geller, data visualized by Ester Pantaleo, project led by Mark Subbarao.</p>
+<p style="color:black;font-width:bold;font-size:125%;">Credits: This plot has been created using <a href="http://d3js.org/">D3</a>  inspired by <a href="http://bost.ocks.org/mike/nations/">http://bost.ocks.org/mike/nations/</a> and uses <a href="http://www.worldwidetelescope.org/">the World Wide Telescope</a>. Data simulated by Aaron M. Geller, data visualized by Ester Pantaleo, project led by Mark Subbarao.</p>
 </div>
 <script>
 
@@ -430,148 +392,144 @@ d3.select('#colorLegend').append('stop')
 
 // Add the radius legend
 var radiusLegend = d3.select("#radiusLegend").append("svg")
-    .attr("width", 200+width + margin.left + margin.right)
-    .attr("height",10+ margin.top + margin.bottom)
+  //  .attr("width", 200+width + margin.left + margin.right)
+  //  .attr("height",10+ margin.top + margin.bottom)
     .style("background-color", "black")
   .append("g")
-    .attr("transform", "translate(" + (margin.left) + "," + (margin.top-600) + ")")
+   // .attr("transform", "translate(" + (margin.left) + "," + (margin.top-600) + ")")
     .attr("class", "radius legend");
 
 radiusLegend.append("circle")
     .attr("fill", "#9fbfff")
 //    .attr('stroke', 'black')
     .attr("cx", 50)
-    .attr("cy", (height + 35))
+    .attr("cy", 35)
     .attr("r", radiusScale(0.1));
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
     .attr("x", 50)
-    .attr("y", height + 75)
+    .attr("y", 75)
     .text("<0.1")
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("circle")
     .attr("fill",  "#9fbfff")
 //    .attr('stroke', 'black')
     .attr("cx", 80)
-    .attr("cy", (height + 35))
+    .attr("cy", 35)
     .attr("r", radiusScale(1));
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
     .attr("x", 80)
-    .attr("y", height + 75)
+    .attr("y", 75)
     .text("1")
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("circle")
     .attr("fill", "#9fbfff")
 //    .attr('stroke', 'black')
     .attr("cx", 120)
-    .attr("cy", height + 35)
+    .attr("cy", 35)
     .attr("r", radiusScale(2));
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
     .attr("x", 120)
-    .attr("y", height + 75)
+    .attr("y", 75)
     .text("2")
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("circle")
     .attr("fill", "#9fbfff")
 //    .attr('stroke', 'black')
     .attr("cx", 180)
-    .attr("cy", (height + 35))
+    .attr("cy", 3)
     .attr("r", radiusScale(10));
 
 radiusLegend.append("text")
     .attr("class", "radius legend")
     .attr("text-anchor", "middle")
     .attr("x", 180)
-    .attr("y", height + 75)
+    .attr("y", 75)
     .text("10")
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("text")
     .attr("text-anchor", "start")
     .attr("x", 0)
-    .attr("y", height + 35)
+    .attr("y", 35)
     .text("Radius")
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("text")
      .attr("text-anchor", "start")
      .attr("x", 0)
-     .attr("y", height + 55)
+     .attr("y", 55)
      .text("Scale")
-     .style("font-size", "12px");
+     .style("font-size", "100%");
 
 //type and color
 radiusLegend.append("circle")
     .attr("fill", "green")
-//    .attr('stroke', 'black')
     .attr("cx", 320)
-    .attr("cy", (height + 35))
+    .attr("cy", 35)
     .attr("r", radiusScale(2));
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
     .attr("x", 320)
-    .attr("y", height + 75)
+    .attr("y", 75)
     .text(theType[1])
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("circle")
     .attr("fill",  "pink")
-//    .attr('stroke', 'black')
     .attr("cx", 400)
-    .attr("cy", (height + 35))
+    .attr("cy", 35)
     .attr("r", radiusScale(2));
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
     .attr("x", 400)
-    .attr("y", height + 75)
+    .attr("y", 75)
     .text(theType[2])
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("circle")
     .attr("fill", "red")
-//    .attr('stroke', 'black')
     .attr("cx", 480)
-    .attr("cy", height + 35)
+    .attr("cy", 35)
     .attr("r", radiusScale(2));
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
     .attr("x", 480)
-    .attr("y", height + 75)
+    .attr("y", 75)
     .text(theType[3])
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("circle")
     .attr("fill", "yellow")
-//    .attr('stroke', 'black')
     .attr("cx", 560)
-    .attr("cy", (height + 35))
+    .attr("cy", 35)
     .attr("r", radiusScale(2));
 
 radiusLegend.append("text")
     .attr("class", "radius legend")
     .attr("text-anchor", "middle")
     .attr("x", 560)
-    .attr("y", height + 75)
+    .attr("y", 75)
     .text(theType[4])
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 radiusLegend.append("text")
     .attr("text-anchor", "start")
     .attr("x", 250)
-    .attr("y", height + 45)
+    .attr("y", 45)
     .text("Type")
-    .style("font-size", "12px");
+    .style("font-size", "100%");
 
 // Add the temperature legend
 
@@ -583,14 +541,14 @@ temperatureLegend.append("text")
     .attr("x", margin.left + 20)
     .attr("y", height-10)
     .text("← increasing temperature")
-    .style("font-size","12px");
+    .style("font-size","100%");
 
 temperatureLegend.append("text")
     .attr("text-anchor", "middle")
     .attr("x", width - 70)
     .attr("y", height-20)
     .text("decreasing temperature →")
-    .style("font-size","12px");;
+    .style("font-size","100%");;
 
 // define gradient
 appendStops = function(d, selection){
@@ -614,13 +572,11 @@ var grad = defs.selectAll(".gradient").data(cols)
       .call(function(d) { return appendStops(d, this); });
 
 var radians = 0.0174532925, 
-clockRadius = 70,
-secondHandLength = clockRadius-12,
-secondHandBalance = 30,
-hourTickStart = clockRadius,
-hourTickLength = -10
-hourLabelRadius = clockRadius + 40
-hourLabelYOffset = 7;
+clockRadius = "17%",
+clockCenterRadius = "1%",
+secondHandLength = "7%", //=-handData.length
+secondHandBalance = "13%",//balance
+hourTickLength = "14%";
 
 var hourScale = d3.scale.linear()
    .range([0,330])
@@ -634,7 +590,7 @@ var handData = [
    {
       type:'second',
       value:0,
-      length:-secondHandLength,
+      length:secondHandLength,
       scale:secondScale,
       balance:secondHandBalance
    }
@@ -646,8 +602,6 @@ function updateData(year){
 
 // add clock
 var face = d3.select("#clock-group").attr('id','clock-face')
-//       .attr("width", "700px")
-//       .attr("height", height + margin.top + margin.bottom)
        .attr('transform','translate(100,70)');
        
 var yearLabel = d3.select("#clock-buttons-svg").append("text")    
@@ -656,7 +610,6 @@ var yearLabel = d3.select("#clock-buttons-svg").append("text")
       .attr("y", clockRadius) 
       .attr("x", clockRadius)
       .attr('transform','translate(40,100)')
-//.style("font-size", "30px")
       .text("0 M years old");
 
 function printText(d,year) {
@@ -669,7 +622,7 @@ var mapSvg = d3.select("#chartmap").append("svg")
     .attr("height", height)
     .style("background-color", "black")
   .append("g");
-//    .attr("transform", "translate(0" + margin.top + ")");
+
  // Add the x and y axes + labels
 mapSvg.append("g")
     .attr("class", "mapx axis")
@@ -779,33 +732,18 @@ d3.json("starscoord.json", function(stars) {
       svg.transition().duration(0);
       initialize();
       GotoConstellation(d);
-      //alert(d.year + d.name);
       displayYear(Math.round(d.year*5005/5000));
       d3.select('#WorldWideTelescopeControlHost')
          .html('<span style="color:red;">' + d.name + '</span>, a real ' + Math.round(d.year) + ' million years old cluster')
-
-      d3.select('#WWTCanvas')
-         //.style("border-color","black")
-         .attr("transform", "translate(" + 0 + "," + 200 + ")");
    }
 
 var bottone = buttonsSvg.attr("class","buttons")
           .selectAll(".button")
-          .data(constellations).enter().append("tr").append("input")
-          .attr("class", "button")
-          .style("color", "black")
-          .style("border-color", "black")
-          .attr("style", "background-color:#ff8912")
-          .attr("type", "button")
-       //   .attr("style", "font-size:35px")
+          .data(constellations).enter().append("br").append("input")
+	  .attr("type", "button")
+	  .attr("class", "btn btn-warning btn-lg btn-block")
           .attr("id",function(d){return d.name;})
-          .attr("style", "padding-top:15px")
-          .attr("style", "padding-bottom:15px") 
-          .attr("style", "padding-left:50px;")
-          .attr("style", "align:middle;")
-       //   .attr("size", "10")
-          .attr("value", function(d){return d.short;})
-          .attr("style", "font-family:Helvetica Neue")
+          .text(function(d){return d.short;})
           .on('click', clickMe);
 
 
@@ -821,8 +759,8 @@ var bottone = buttonsSvg.attr("class","buttons")
          .attr('class', 'hour-tick')
          .attr('x1',0)
          .attr('x2',0)
-         .attr('y1',hourTickStart)
-         .attr('y2',hourTickStart + hourTickLength)
+         .attr('y1', hourTickLength)
+         .attr('y2', clockRadius)
          .attr('transform',function(d){return 'rotate(' + hourScale(d.year*12/5005+6) + ')';})
          .on('click',clickMe)
          .append("title")
@@ -834,7 +772,7 @@ var bottone = buttonsSvg.attr("class","buttons")
          .append('circle').attr('class','hands-cover')
          .attr('x',0)
          .attr('y',0)
-         .attr('r',clockRadius/20)
+         .attr('r',clockCenterRadius)
 
       face.append('g').append('circle').attr('class','screen')
          .attr('x',0)
@@ -852,7 +790,7 @@ var bottone = buttonsSvg.attr("class","buttons")
          .attr('x1',0)
          .attr('y1',function(d){return d.balance ? d.balance : 0;})
          .attr('x2',0)
-         .attr('y2',function(d){return d.length;})
+         .attr('y2',function(d){return -d.length;})
          .attr('transform',function(d){return 'rotate('+ d.scale(d.value) +')';});
    }
 

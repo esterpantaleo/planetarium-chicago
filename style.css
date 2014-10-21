@@ -6,13 +6,12 @@
   background: #fcfcfa;
   color: #333;
   font-family: Helvetica Neue;
-  margin: 1em auto 4em auto;
+  margin: 0.5em auto 2em auto;
   /* position: absolute; */
-  top:0px;
-  bottom:0px;
-  left:50px;
+  top:0%;
+  bottom:0%;
+  left:2%;
   right:0;
-  width:960;
 }
 
 .ocks-org header,
@@ -37,15 +36,21 @@
   color: #636363;
 }
 
+.container {
+padding-right: 1%;
+padding-left: 1%;
+margin-right: auto;
+margin-left: auto;
+}
+
 h1 {
-  font-size: 30px;
+  font-size: 2.7em;
   font-weight: bold;
-  letter-spacing: -2px;
   margin: .3em 0 .1em 0;
 }
 
 h2 {
-  font-size: 16px;
+  font-size: 1.2em;
   font-weight: bold;
   margin: .3em 0 .1em 0;
 }
@@ -58,47 +63,13 @@ body > p, li > p {
   line-height: 1.5em;
 }
 
-body > p {
-  width: 720px;
-}
-
-body > blockquote {
-  width: 640px;
-}
-
 blockquote q {
   display: block;
   font-style: oblique;
 }
 
-li {
-  width: 680px;
-}
-
-a {
-  color: steelblue;
-}
-
-a:not(:hover) {
-  text-decoration: none;
-}
-
-pre, code, textarea {
-  font-family: "Menlo", monospace;
-}
-
-code {
-  line-height: 1em;
-}
-
 textarea {
   font-size: 100%;
-}
-
-body > pre {
-  border-left: solid 2px #ccc;
-  padding-left: 18px;
-  margin: 2em 0 2em -20px;
 }
 
 .html .value,
@@ -127,10 +98,6 @@ body > pre {
 .javascript .class,
 .javascript .special {
   color: #e6550d;
-}
-
-svg {
-  font: 10px sans-serif;
 }
 
 .axis path, .axis line {
