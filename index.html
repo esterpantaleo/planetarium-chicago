@@ -135,22 +135,23 @@
 
 <body style="background-color:white;">
     <div class="container">
-        <h1 style="color:black;">Star Cluster Evolution, From Birth to Today</h1>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1 style="color:black;">Star Cluster Evolution, From Birth to Today</h1>
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-md-4">
-	            <div class="row" id="chart-h2">
-	                <h2 href="#" id="chart-title" title="Astronomers use H-R diagrams of real star clusters to study the stars' ages, distances and chemical compositions. An H-R diagram, or Hertzsprung–Russell diagram, plots the stellar surface temperatures (bluer is hotter and towards the left on the plot) against the stellar luminosities (brighter is towards the top of the plot). Our Sun has a surface temperature of about 5,800 Kelvin and a luminosity of 1 in these units.">H-R diagram</h2>
-                </div> <!-- closes row -->
-	            <div class="row" id="chart"></div>
+	            <h2 href="#" id="chart-title" title="Astronomers use H-R diagrams of real star clusters to study the stars' ages, distances and chemical compositions. An H-R diagram, or Hertzsprung–Russell diagram, plots the stellar surface temperatures (bluer is hotter and towards the left on the plot) against the stellar luminosities (brighter is towards the top of the plot). Our Sun has a surface temperature of about 5,800 Kelvin and a luminosity of 1 in these units.">H-R diagram</h2>
+	            <div id="chart"></div>
             </div>  <!-- closes col-md-4 -->
 
 
             <div class="col-md-2">
-	            <div class="row" id="chartmap-h2">
-	                <h2 href="#" id="chartmap-title" title="Here you see a projection of the positions of the stars in space, tracking the cluster as it orbits around the Galaxy. In this simulation the Galactic center is towards the left of the screen, and the cluster's orbit is aligned roughly with the vertical direction.">Spatial coordinates plot</h2>
-                </div> <!-- closes row -->
-	            <div class="row" id="chartmap"></div>
+	            <h2 href="#" id="chartmap-title" title="Here you see a projection of the positions of the stars in space, tracking the cluster as it orbits around the Galaxy. In this simulation the Galactic center is towards the left of the screen, and the cluster's orbit is aligned roughly with the vertical direction.">Spatial coordinates</h2>
+	            <div id="chartmap"></div>
             </div>  <!-- closes col-md-2 -->
 
             <div class="col-md-2" id="clock-buttons-td-h2">
@@ -163,10 +164,9 @@
             </div> <!-- closes col-md-2 -->
 
             <div class="col-md-4">
-	            <div class="row" id="WWT" style="color:black;width:100%;height:100%">
-	                <h2 id="WorldWideTelescopeControlHost" title="You can explore real images of stars in this window. You can zoom in and out (using the Page-Up and Page-Down keys on your keyboard or the scroll wheel on your mouse). You can move your view (by clicking and moving your mouse in the main window). You can also rotate the view (by holding down the control key while you move your mouse)."></h2>
-                </div> <!-- closes row -->
-	            <div class="row" id="WWTCanvas" style="color:black;width:100%;height:100%;"></div>
+                <!-- <div class="row" id="WWT" style="color:black;width:100%;height:100%"> -->
+	            <h2 id="WorldWideTelescopeControlHost" title="You can explore real images of stars in this window. You can zoom in and out (using the Page-Up and Page-Down keys on your keyboard or the scroll wheel on your mouse). You can move your view (by clicking and moving your mouse in the main window). You can also rotate the view (by holding down the control key while you move your mouse)."></h2>
+	            <div id="WWTCanvas" style="color:black;width:100%;height:100%;"></div>
             </div> <!-- closes col-md-4 -->
         </div> <!-- closes outer row -->
   
