@@ -2,12 +2,20 @@
 <html class="ocks-org do-not-copy">
   <head>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link href="assets/css/bootstrap-responsive.css" rel="stylesheet">
+
+        <!-- I think this line can come out. -->
+        <!-- <link href="assets/css/bootstrap-responsive.css" rel="stylesheet"> -->
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css">
 	<title>Star Cluster Evolution, From Birth to Today</title>
 	<style>
 	@import url(style.css?aea6f0a);
+
+    p {
+      color: black;
+      width: 100%;
+      font-size: 125%;
+    }
 
 	text {
 	  font-size: 100%;
@@ -130,65 +138,98 @@
 	  }
 	</script>
 </head>
-<body style="background-color:white;">
-  <div class="container">
-    <h1 style="color:black;">Star Cluster Evolution, From Birth to Today</h1>
-    <div class="row">
-      <div class="col-md-4">
-	<div class="row" id="chart-h2">
-	<h2 href="#" id="chart-title" title="Astronomers use H-R diagrams of real star clusters to study the stars' ages, distances and chemical compositions. An H-R diagram, or Hertzsprung–Russell diagram, plots the stellar surface temperatures (bluer is hotter and towards the left on the plot) against the stellar luminosities (brighter is towards the top of the plot). Our Sun has a surface temperature of about 5,800 Kelvin and a luminosity of 1 in these units.">H-R diagram</h2>
-	</div>
-	<div class="row" id="chart">
-	</div>
 
-      </div>
-      <div class="col-md-2">
-	<div class="row" id="chartmap-h2">
-	<h2 href="#" id="chartmap-title" title="Here you see a projection of the positions of the stars in space, tracking the cluster as it orbits around the Galaxy. In this simulation the Galactic center is towards the left of the screen, and the cluster's orbit is aligned roughly with the vertical direction.">Spatial coordinates plot</h2>
-	</div>
-	<div class="row" id="chartmap">
-	</div>
-      </div>
-      <div class="col-md-2" id="clock-buttons-td-h2">
-	<svg id="clock-buttons-svg">
-	  <g id="clock-group"></g>
-	  <br><br>
-	  <div class="btn-group-vertical" id="buttons-group">
-	  </div>
-	</svg>
-      </div>
-      <div class="col-md-4">
-	<div class="row" id="WWT" style="color:black;width:100%;height:100%">
-	<h2 id="WorldWideTelescopeControlHost" title="You can explore real images of stars in this window. You can zoom in and out (using the Page-Up and Page-Down keys on your keyboard or the scroll wheel on your mouse). You can move your view (by clicking and moving your mouse in the main window). You can also rotate the view (by holding down the control key while you move your mouse)."></h2>
-	</div>
-	<div class="row" id="WWTCanvas" style="color:black;width:100%;height:100%;">
-	</div>
-      </div>
-    </div>
+<body style="background-color:white;">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1 style="color:black;">Star Cluster Evolution, From Birth to Today</h1>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+	            <h2 href="#" id="chart-title" title="Astronomers use H-R diagrams of real star clusters to study the stars' ages, distances and chemical compositions. An H-R diagram, or Hertzsprung–Russell diagram, plots the stellar surface temperatures (bluer is hotter and towards the left on the plot) against the stellar luminosities (brighter is towards the top of the plot). Our Sun has a surface temperature of about 5,800 Kelvin and a luminosity of 1 in these units.">H-R diagram</h2>
+	            <div id="chart"></div>
+            </div>  <!-- closes col-md-4 -->
+
+
+            <div class="col-md-2">
+	            <h2 href="#" id="chartmap-title" title="Here you see a projection of the positions of the stars in space, tracking the cluster as it orbits around the Galaxy. In this simulation the Galactic center is towards the left of the screen, and the cluster's orbit is aligned roughly with the vertical direction.">Spatial coordinates</h2>
+	            <div id="chartmap"></div>
+            </div>  <!-- closes col-md-2 -->
+
+            <div class="col-md-2" id="clock-buttons-td-h2">
+	            <svg id="clock-buttons-svg">
+                    <g id="clock-group"></g>
+	                <br>
+                    <br>
+	                <div class="btn-group-vertical" id="buttons-group"></div>
+	            </svg>
+            </div> <!-- closes col-md-2 -->
+
+            <div class="col-md-4">
+                <!-- <div class="row" id="WWT" style="color:black;width:100%;height:100%"> -->
+	            <h2 id="WorldWideTelescopeControlHost" title="You can explore real images of stars in this window. You can zoom in and out (using the Page-Up and Page-Down keys on your keyboard or the scroll wheel on your mouse). You can move your view (by clicking and moving your mouse in the main window). You can also rotate the view (by holding down the control key while you move your mouse)."></h2>
+	            <div id="WWTCanvas" style="color:black;width:100%;height:100%;"></div>
+            </div> <!-- closes col-md-4 -->
+        </div> <!-- closes outer row -->
   
 
-    <div class="row">
-      <div class="col-md-6" id="radiusLegend"></div>
-      <div class="col-md-6" id="radiusLegend2">
-	<p style="color:grey;width:100%;font-size:100%;"> <span style="color:red;">Mouseover the year under the clock to move forward and backwards through time. <br>Mouseover the plot to see a description and each star to see their properties. <br>Click on one of the clock ticks to visualize the HR diagram corresponding to a real constellation of the specified age: an image of the same costellation in the World Wide Telescope will appear on the right.
-      </div>
-    </div>
-    <p style="color:black;width:100%;font-size:125%;"> 
-Our Sun likely formed in a small cluster of stars that dissolved many years ago.  Here you can interact with a computer simulation of a 100-star cluster similar 
-to our Sun's birthplace, as it evolves in time from birth until the present day (at an age of 5 billion years). <br>
+        <div class="row">
+            <div class="col-md-6" id="radiusLegend"></div>
+            <div class="col-md-6" id="radiusLegend2">
+	            <p style="color:grey;width:100%;font-size:100%;"> 
+                    <span style="color:red;">
+                        Mouseover the year under the clock to move forward and backwards through time.
+                        <br>
+                        Mouseover the plot to see a description and each star to see their properties.
+                        <br>
+                        Click on one of the clock ticks to visualize the HR diagram corresponding to a real constellation of the specified age:
+                        an image of the same costellation in the World Wide Telescope will appear on the right.
+                    </span>
+                </p>
+            </div>  <!-- closes col-md-6 -->
+        </div>  <!-- closes row -->
 
-In the HR diagram on the left, watch as the most luminous stars quickly evolve from the "main sequence" to become "giants". Indeed, all stars evolve in time, with the most massive 
-(and therefore most luminous) evolving most rapidly. You may also notice two different branches of main-sequence stars; the branch to the red (right) 
-on the plot is composed of binary stars--2 stars bound by their own mutual gravity and orbiting each other, but unresolved from Earth at the distances 
-to most clusters.  Can you find other stars that don't follow the standard evolutionary sequence?  <br>
 
-In the middle, you see the stars moving in space as the cluster orbits around the Galaxy. Watch as the cluster quickly dissolves under the tidal pull of our Galaxy and is drawn into a tight line, displaying "tidal tails" 
-similar to those observed in real dissolving star clusters. You may also notice neutron stars leaving the cluster early at high velocities, 
-due to large kicks imparted by the stars' very energetic supernovae explosions.  Our Sun likely escaped from its birth cluster like 
-the majority of the stars in this simulation: slowly and calmly, and eventually leaving its sibling to live out its life in isolation--which was good news for us!
-</p>
-<p style="color:black;font-width:bold;font-size:125%;">Credits: This plot has been created using <a href="http://d3js.org/">D3</a>  inspired by <a href="http://bost.ocks.org/mike/nations/">http://bost.ocks.org/mike/nations/</a> and uses <a href="http://www.worldwidetelescope.org/">the World Wide Telescope</a>. Data simulated by Aaron M. Geller, data visualized by Ester Pantaleo, project led by Mark Subbarao.</p>
-</div>
+        <div class="row">
+            <div class="col-md-12">
+                <p>
+                    Our Sun likely formed in a small cluster of stars that dissolved many years ago.
+                    Here you can interact with a computer simulation of a 100-star cluster similar
+                    to our Sun's birthplace, as it evolves in time from birth until the present day
+                    (at an age of 5 billion years).
+                </p><p>
+                    <!-- Each of these paragraphs probably wants to be in it's own P tag. -->
+                    In the HR diagram on the left, watch as the most luminous stars quickly
+                    evolve from the "main sequence" to become "giants". Indeed, all stars evolve in time,
+                    with the most massive (and therefore most luminous) evolving most rapidly. You may also
+                    notice two different branches of main-sequence stars; the branch to the red (right) 
+                    on the plot is composed of binary stars--2 stars bound by their own mutual gravity and
+                    orbiting each other, but unresolved from Earth at the distances to most clusters.
+                    Can you find other stars that don't follow the standard evolutionary sequence?
+                </p><p>
+                    In the middle, you see the stars moving in space as the cluster orbits around the Galaxy.
+                    Watch as the cluster quickly dissolves under the tidal pull of our Galaxy and is drawn into a tight line, displaying "tidal tails" 
+                    similar to those observed in real dissolving star clusters. You may also notice neutron stars leaving the cluster early at high velocities, 
+                    due to large kicks imparted by the stars' very energetic supernovae explosions.  Our Sun likely escaped from its birth cluster like 
+                    the majority of the stars in this simulation: slowly and calmly, and eventually leaving its sibling to live out its life in isolation--which was good news for us!
+                </p>
+
+                <p style="color:black;font-width:bold;font-size:125%;">
+                    Credits: This plot has been created using <a href="http://d3js.org/">D3</a> inspired by
+                    <a href="http://bost.ocks.org/mike/nations/">http://bost.ocks.org/mike/nations/</a> and uses
+                    <a href="http://www.worldwidetelescope.org/">the World Wide Telescope</a>.
+                    Data simulated by Aaron M. Geller, data visualized by Ester Pantaleo, project led by Mark Subbarao.</p>
+                </p>
+
+            </div> <!-- closes col-md-12 -->
+        </div> <!-- closes row -->
+
+    </div> <!-- closes container -->
+
 <script>
 
 // Various accessors that specify dimensions of data to visualize.
@@ -289,7 +330,7 @@ var cols = ["#ff3800","#ff5300","#ff6500","#ff7300","#ff7e00","#ff8912","#ff932c
 
 // Chart dimensions.
 var margin = {top: 0, right: 10, bottom: 80, left: 50},
-    width = 400,
+    width = Math.ceil(document.getElementById('chart').clientWidth * 0.9),
     height = 600,
     heightPlot= 600 - margin.bottom - margin.top,
     minTempScale = 1000,
