@@ -8,3 +8,6 @@ This interactive applications provides linked view visualizations of a star clus
 
 Our Sun likely formed in a small cluster of stars that dissolved many years ago. In this HTML application you can interact with a computer simulation of a 100-star cluster similar to our Sun's birthplace, as it evolves in time from birth until the present day (at an age of 5 billion years). We see how stars evolve and how the tidal forces from our Galaxy pull the star cluster apart. Also odd paths in the HR diagram show the trading of mass between binary stars. Next to these visualizations you can explore images of observed star clusters, comparing them to our simulated cluster at a similar stage of its evolution. Linked view visualizations are created using the D3 javascript library and the Worldwide Telescope sky viewer.
 
+##Testing
+
+cd into the directory containing file `index.html` then type `python -m SimpleHTTPServer 8888` and open your browser at page (http://localhost:8888)[http://localhost:8888]
