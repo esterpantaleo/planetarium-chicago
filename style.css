@@ -11,7 +11,7 @@
   top:0%;
   bottom:0%;
   left:0%;
-  right:0;
+  right:0%;
 }
 
 .ocks-org header,
@@ -39,12 +39,12 @@
 .container {
 padding-right: 1%;
 padding-left: 1%;
-margin-right: auto;
-margin-left: auto;
+margin-right: 0%;
+margin-left: 5%;
 }
 
 h1 {
-  font-size: 1.7vw;
+  font-size: 4vw;
   font-weight: bold;
   margin: .3em 0 .1em 0;
 }
