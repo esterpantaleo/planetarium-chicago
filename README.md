@@ -1,6 +1,6 @@
 ##Introduction
 
-This is a repository for my project as a volunteer at [the Adler Planetarium](http://svl.adlerplanetarium.org/opencluster/)
+This is a repository for my [project](http://svl.adlerplanetarium.org/opencluster/) as a volunteer at the Adler Planetarium.
 
 This interactive applications provides linked view visualizations of a star cluster simulation which are synchronized with a imagery of observed star clusters of similar ages. Animating the classic astronomy information visualization, the HR diagram, illustrates stellar evolution, while plotting the stars positions show how Galactic tides ripped our Sun's birth cluster apart forever separating us from our sibling stars. 
 
