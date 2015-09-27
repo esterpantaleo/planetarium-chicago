@@ -1,6 +1,6 @@
 ##Introduction
 
-This is a repository for my project as a volunteer at the Planetarium http://svl.adlerplanetarium.org/opencluster/
+This is a repository for my project as a volunteer at [the Adler Planetarium](http://svl.adlerplanetarium.org/opencluster/)
 
 This interactive applications provides linked view visualizations of a star cluster simulation which are synchronized with a imagery of observed star clusters of similar ages. Animating the classic astronomy information visualization, the HR diagram, illustrates stellar evolution, while plotting the stars positions show how Galactic tides ripped our Sun's birth cluster apart forever separating us from our sibling stars. 
 
@@ -10,4 +10,4 @@ Our Sun likely formed in a small cluster of stars that dissolved many years ago.
 
 ##Testing
 
-cd into the directory containing file `index.html` then type `python -m SimpleHTTPServer 8888` and open your browser at page (http://localhost:8888)[http://localhost:8888]
+cd into the directory containing file `index.html` then type `python -m SimpleHTTPServer 8888` and open your browser at page [http://localhost:8888](http://localhost:8888)
