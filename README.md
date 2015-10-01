@@ -1,6 +1,6 @@
 ##Introduction
 
-This is a repository for my (<a href="http://d3js.org/" target="_blank">d3</a>) <a href="http://svl.adlerplanetarium.org/opencluster/" target="_blank">project</a> as a volunteer at the Adler Planetarium representing an animated and interactive HR diagram of a simulated cluster of start.
+This is a repository for my (<a href="http://d3js.org/" target="_blank">d3</a>) <a href="http://svl.adlerplanetarium.org/opencluster/" target="_blank">project</a> as a volunteer at the Adler Planetarium representing an animated and interactive HR diagram of a simulated cluster of stars.
 
 An <a href="https://en.wikipedia.org/wiki/Hertzsprung%E2%80%93Russell_diagram" target="_blank">HR diagram</a> is a classic astronomy information visualization used to classify stars according to their luminosity and their temperature. 
 We created an animated and interactive version of the HR diagram and used it to visualize simulated data of a cluster of 100-star similar to our Sun's birthplace. 
