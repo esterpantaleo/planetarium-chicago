@@ -720,21 +720,22 @@ d3.json("starscoord.json", function(stars) {
     // Interpolate data. Then add a dot and a mapDot per star and a tooltip for each star. 
     var interpolatedData = interpolateData(0);
 
-    var dot = svg.append("g")
+    var dot = svg.append("g").attr("class", "myg")
         .selectAll(".myDot")
         .data(interpolatedData);
     var dotEnter = dot.enter();
     dotEnter.append("circle")
-             .filter(function(d){ return (d.type == 1); })
-             .attr("cx", function(d) { return xScale(x(d)); })
-             .attr("cy", function(d) { return yScale(y(d)); })
-             .attr("r", function(d) { return radiusScale(radius(d)); })
-             .attr("fill", function(d) { return myCols[Math.round(colorScale(color(d)))]; })
-             .attr("visibility", function(d) { return d.visibility; })
-             .attr("class", "myDot")
-             .sort(order);
+         .filter(function(d) { return d.type==1; })
+         .attr("cx", function(d) { return xScale(x(d)); })
+         .attr("cy", function(d) { return yScale(y(d)); })
+         .attr("r", function(d) { return radiusScale(radius(d)); })
+         .attr("fill", function(d) { return myCols[Math.round(colorScale(color(d)))]; })
+         .attr("visibility", function(d) { return d.visibility; })
+         .attr("class", "myDot")
+         .sort(order);   
+
     dotEnter.append("use")
-        .filter(function(d){ return (!(d.type == 1)); })
+        .filter(function(d) { return d.type!=1; })
         .attr("xlink:href", function(d) {
              if ((d.type == 3) || (d.type == 4)) { 
                  return "#my45cross"; 
@@ -744,8 +745,6 @@ d3.json("starscoord.json", function(stars) {
         })
         .attr("x", function(d) { return xScale(x(d)); })
         .attr("y", function(d) { return yScale(y(d)); })
-        .attr("visibility", function(d) { return d.visibility; })
-        .attr("class", "myDot")
         .attr("fill", function(d) {
              if ((d.type == 2) || (d.type == 4)) { 
                  return "yellow"; 
@@ -753,14 +752,21 @@ d3.json("starscoord.json", function(stars) {
                  return "green"; 
              }
         })
+        .attr("visibility", function(d) { return d.visibility; })
+        .attr("class", "myDot")
         .sort(order);
 
-    var mapDot = mapSvg.append("g")
+function createSvgEl(name) {
+    return document.createElementNS('http://www.w3.org/2000/svg', name);
+}
+
+
+    var mapDot = mapSvg.append("g").attr("class", "myg")
         .selectAll(".myMapDot")
         .data(interpolatedData);
     var mapDotEnter = mapDot.enter();
     mapDotEnter.append("circle")
-        .filter(function(d){ return (d.type == 1); })
+        .filter(function(d) { return d.type==1; })
         .attr("cx", function(d) { return mapxScale(d.xcoord); })
         .attr("cy", function(d) { return mapyScale(d.ycoord); })
         .attr("r", function(d) { return radiusScale(radius(d)); })
@@ -769,7 +775,7 @@ d3.json("starscoord.json", function(stars) {
         .attr("class", "myMapDot")
         .sort(order);
      mapDotEnter.append("use")
-        .filter(function(d){ return (!(d.type == 1)); })
+        .filter(function(d) { return d.type!=1; })
         .attr("xlink:href", function(d) {
             if ((d.type == 3) || (d.type == 4)) { 
                 return "#my45cross"; 
@@ -862,19 +868,23 @@ d3.json("starscoord.json", function(stars) {
         //update data bound to circles in both charts 
         interpolatedData = interpolateData(year);
         dot.exit().remove();
-        dot = svg.selectAll(".myDot").data(interpolatedData, key);
+        d3.selectAll(".myg").remove();
+        svg.selectAll("circle").remove();
+        svg.selectAll("use").remove();
+        dot = svg.append("g").attr("class", "myg").selectAll(".myDot").data(interpolatedData, key);
         dotEnter = dot.enter();
         dotEnter.append("circle")
-            .filter(function(d){ return (d.type == 1); })
-            .attr("cx", function(d) { return xScale(x(d)); }) 
-            .attr("cy", function(d) { return yScale(y(d)); })  
-            .attr("r", function(d) { return radiusScale(radius(d)); })
+            .filter(function(d) { return d.type==1; })
+            .attr("cx", function(d) { var l = xScale(x(d)); return isNaN(l) ? 0 : l; }) 
+            .attr("cy", function(d) { var l = yScale(y(d)); return isNaN(l) ? 0 : l; })  
+            .attr("r", function(d) { var l = radiusScale(radius(d)); return isNaN(l) ? 0 : l; })
             .attr("fill", function(d) { return myCols[Math.round(colorScale(color(d)))]; })
             .attr("visibility", function(d) { return d.visibility; })
             .attr("class", "myDot")
             .sort(order);
+
         dotEnter.append("use")
-            .filter(function(d){ return (!(d.type == 1)); })
+            .filter(function(d) { return d.type!=1; })
             .attr("xlink:href", function(d) {
                 if ((d.type == 3) || (d.type == 4)) { 
                     return "#my45cross"; 
@@ -889,20 +899,22 @@ d3.json("starscoord.json", function(stars) {
                     return "green"; 
                 }
             })
-            .attr("x", function(d) { return xScale(x(d)); })
-            .attr("y", function(d) { return yScale(y(d)); })
+            .attr("x", function(d) { var l = xScale(x(d)); return isNaN(l) ? 0 : l; })
+            .attr("y", function(d) { var l = yScale(y(d)); return isNaN(l) ? 0 : l; })
             .attr("visibility", function(d) { return d.visibility; })
             .attr("class", "myDot")
             .sort(order);
 
         mapDot.exit().remove();
-        mapDot = mapSvg.selectAll(".myMapDot").data(interpolatedData, key);
+        mapSvg.selectAll("circle").remove();
+	mapSvg.selectAll("use").remove();
+        mapDot = mapSvg.append("g").attr("class", "myg").selectAll(".myMapDot").data(interpolatedData, key);
         mapDotEnter = mapDot.enter();
         mapDotEnter.append("circle")
             .filter(function(d){ return (d.type == 1); })   
-            .attr("cx", function(d) { return mapxScale(d.xcoord); })
-            .attr("cy", function(d) { return mapyScale(d.ycoord); })
-            .attr("r", function(d) { return radiusScale(radius(d)); })
+            .attr("cx", function(d) { var l = mapxScale(d.xcoord); return isNaN(l) ? 0 : l; })
+            .attr("cy", function(d) { var l = mapyScale(d.ycoord); return isNaN(l) ? 0 : l; })
+            .attr("r", function(d) { var l = radiusScale(radius(d)); return isNaN(l) ? 0 : l; })
             .attr("fill", function(d) { return myCols[Math.round(colorScale(color(d)))]; })
             .attr("visibility", function(d) { return d.visibility; })
             .attr("class", "myMapDot")
@@ -918,8 +930,8 @@ d3.json("starscoord.json", function(stars) {
             })
             .attr("fill", function(d) {
                  if (d.type == 2 || d.type == 4) { return "yellow"; } else { return "green"; }})
-            .attr("x", function(d) { return mapxScale(d.xcoord); })
-            .attr("y", function(d) { return mapyScale(d.ycoord); })
+            .attr("x", function(d) { var l = mapxScale(d.xcoord); return isNaN(l) ? 0 : l; })
+            .attr("y", function(d) { var l = mapyScale(d.ycoord); return isNaN(l) ? 0 : l; })
             .attr("visibility", function(d) { return d.visibility; })
             .attr("class", "myMapDot")
             .sort(order);
@@ -1019,7 +1031,6 @@ d3.json("starscoord.json", function(stars) {
    
     // Interpolates the dataset for the given (fractional) year.
     function interpolateData(year) {
-
         return stars.map(function(d) {
             var mymax=d.T.reduce(function(max, arr) {
                            return max >= arr[0] ? max : arr[0];
