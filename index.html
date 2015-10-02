@@ -393,7 +393,7 @@ var svg = d3.select("#chart").append("svg")
 svg.append("g")
     .attr("class", "x axis")
     .call(xAxis)
-    .attr("transform", "translate(0," + (heightPlot + heightPlot/32) + ")");
+    .attr("transform", "translate(0," + (heightPlot + heightPlot/25) + ")");
 
 svg.append("g")
     .attr("class", "y axis")
@@ -421,7 +421,7 @@ temperatureLegend.append("text")
 
 temperatureLegend.append("text")
     .attr("text-anchor", "middle")
-    .attr("x", widthPlot - 6.5*myMargin.left/3 )
+    .attr("x", widthPlot - 1.6*myMargin.left )
     .attr("y", heightPlot + 2*myMargin.bottom/3)
     .html("decreasing temperature &rarr;")
     .style("font-size", "0.8vw");
@@ -1083,14 +1083,14 @@ function createSvgEl(name) {
  
     //-----------------------ADD SLIDER--------------------------------------------------------------
     var brush = d3.svg.brush()
-            .x(sliderX)
-            .extent([0, 0])
-            .on("brush", brushed),
+        .x(sliderX)
+        .extent([0, 0])
+        .on("brush", brushed),
         slider = sliderSvg.append("g").attr("class", "g-slider").call(brush);
     
     slider.selectAll(".extent,.resize").remove();
     slider.select(".background")
-       .attr("height", 4*myBox.height)
+       .attr("height", 4.2*myBox.height)
        .attr("width", 3*myWidth)
        .attr("transform", "translate(0," + brushHeight/4 + ")");
 
