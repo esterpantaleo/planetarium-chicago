@@ -6,7 +6,7 @@
   background: #fcfcfa;
   color: #333;
   font-family: Helvetica Neue;
-  margin: 0.5em auto 2em auto;
+  margin: 0.5 auto 2em auto;
   /* position: absolute; */
   top:0%;
   bottom:0%;
@@ -44,15 +44,16 @@ margin-left: 5%;
 }
 
 h1 {
-  font-size: 4vw;
+  font-size: 3vw;
   font-weight: bold;
-  margin: .3em 0 .1em 0;
+  margin: 0.5em 0 0.3em -0.5em;
 }
 
 h2 {
   font-size: 1.2vw;
   font-weight: bold;
-  margin: .3em 0 .1em 0;
+  margin: 0em 0em 1em 0;
+  color: white;
 }
 
 h1, h2 {
@@ -127,3 +128,115 @@ blockquote q:before,
 blockquote q:after {
   content: "";
 }
+
+        text{
+          font-size: 0.8vw;
+          fill: yellow;
+        }
+
+        .timeaxis path, line {
+          fill: none;
+          stroke: yellow;
+          shape-rendering: crispEdges;
+        }
+
+        .timeaxis text {
+          stroke: transparent;
+          font-weight: normal;
+          font-size: 0.8vw;
+        }
+
+        .axis path, .axis line {
+          fill: none;
+          stroke: yellow;
+          shape-rendering: crispEdges;
+        }
+
+        .axis text {
+          stroke: transparent;
+          font-weight: normal;
+          font-size: 0.8vw;
+        }
+
+        .label {
+          fill: yellow;
+        }
+
+        .overlay{
+          pointer-events: all;
+          cursor: ew-resize;
+          fill: transparent;
+          font-size: 1vw;
+        }
+
+        .tooltip {
+           cursor: help;
+           position: absolute;
+           top: -10px;
+           display: none;
+           font-weight: normal;
+           color: black;
+           background-color: rgba( 255, 255, 0, .7);
+           font-size: 1.2vw;
+           text-shadow: none;
+           -webkit-border-radius: 7px;
+           -moz-border-radius: 7px;
+           -o-border-radius: 7px;
+           border-radius: 7px;
+           text-align: left;
+           opacity: 0;
+           -webkit-transition:opacity 250ms ease-out;
+           -moz-transition:opacity 250ms ease-out;
+           -ms-transition:opacity 250ms ease-out;
+           -o-transition:opacity 250ms ease-out;
+           transition:opacity 250ms ease-out;
+           padding: 10px;
+           margin-right: -620px;
+           width: 300px;
+        }
+
+        .cooltip {
+           display: none;
+           opacity: 0;
+           position: fixed;
+           font-weight: normal;
+           color: black;
+           background-color: rgba( 255, 255, 0, .7);
+           z-index: 998;
+           font-size: 1.2vw;
+           text-shadow: none;
+           -webkit-border-radius: 7px;
+           -moz-border-radius: 7px;
+           -o-border-radius: 7px;
+           border-radius: 7px;
+           text-align: left;
+           padding: 10px;
+           margin: 0.5em 0.5em 2em;
+           width: 450px;
+        }
+
+
+        .field:hover .tooltip{
+           display: block;
+           opacity: 1;
+        }
+
+        .axis .g-halo {
+           stroke: black;
+           stroke-width: 4px;
+           stroke-linecap: round;
+        }
+
+        .g-slider .g-handle path {
+           stroke: yellow;
+           stroke-width: 3px;
+           stroke-linecap: round;
+           pointer-events: none;
+        }
+
+        .g-slider .g-handle text {
+           fill: yellow;
+           font-size: 1.2vw;
+           font-weight: bold;
+        }
+ 

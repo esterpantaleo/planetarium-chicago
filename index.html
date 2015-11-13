@@ -1,254 +1,154 @@
 <!DOCTYPE html>
 <html class="ocks-org do-not-copy">
-  <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
-	
-        <title>Star Cluster Evolution</title>
-	<style>
-	@import url(style.css?aea6f0a);
-	
-        text{
-	  font-size: 0.8vw;
-	  fill: yellow;
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <title style="color:white;">Star Cluster Evolution</title>
+    <style>
+        @import url(style.css?aea6f0a);
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>
+    <script>
+	// Declare global Worldwide Telescope object
+	var wwt;
+	// Create variables to hold the changeable settings
+	var bShowCrosshairs = true;
+	var bShowUI = true;
+	var bShowFigures = true;
+	// This function initializes the wwt object and once it is done
+	// it fires the wwtReady event
+	function initialize() {
+	    wwt = wwtlib.WWTControl.initControl("WWTCanvas");
+	    wwt.add_ready(wwtReady);
+	    // This ensures that events that would have fired before we registered them get fired
+	    wwt.endInit();
 	}
-        
-        .timeaxis path, line {
-          fill: none;
-          stroke: black;
-          shape-rendering: crispEdges;
-        }
-       
-        .timeaxis text {
-          stroke: transparent;
-          font-weight: normal;
-          font-size: 0.8vw;
-        }
-
-	.axis path, .axis line {
-	  fill: none;
-	  stroke: yellow;
-	  shape-rendering: crispEdges;
+	// This function is where you would put your custom code for WWT
+	// following the initForWwt() call
+	function wwtReady() {
+	    initForWwt();
 	}
-
-	.axis text {
-	  stroke: transparent;
-	  font-weight: normal;
-          font-size: 0.8vw;
+	// This is the initialization for Worldwide Telescope
+	function initForWwt() {
+	    wwt.loadImageCollection("http://www.worldwidetelescope.org/COMPLETE/wwtcomplete.wtml");
+	    // add any wwt object settings changes here
+	    wwt.settings.set_showCrosshairs(bShowCrosshairs);
+	    wwt.settings.set_showConstellationFigures(bShowFigures);
+	    wwt.hideUI(!bShowUI);
 	}
-        
-	.label {  
-	  fill: yellow;
+	// A function to change the view to different constellations
+	// Note the fov set to 60 (maximum view distance)
+	// This function is called from the button entries in the html table
+	function GotoConstellation(d) {
+	    wwt.gotoRaDecZoom(d.ra*15, d.dec, d.zoom/2, false);
 	}
-
-        .overlay{
-	  pointer-events: all;
-	  cursor: ew-resize;
-	  fill: transparent;
-	  font-size: 1vw;
-	}
- 
-        .tooltip {
-           cursor: help;
-	   position: absolute;
-           top: -10px;
-           display: none;
-           font-weight: normal;
-           color: black;
-           background-color: rgba( 255, 255, 0, .7); 
-           font-size: 1.2vw;
-	   text-shadow: none;
-           -webkit-border-radius: 7px;
-           -moz-border-radius: 7px;
-           -o-border-radius: 7px;
-           border-radius: 7px;
-           text-align: left;
-           opacity: 0;
-           -webkit-transition:opacity 250ms ease-out;
-           -moz-transition:opacity 250ms ease-out;
-            -ms-transition:opacity 250ms ease-out;
-             -o-transition:opacity 250ms ease-out;
-                transition:opacity 250ms ease-out;
-           padding: 10px;
-           margin-right: -620px;
-           width: 300px;
-        }
-
-        .cooltip {
-           display: none;
-           opacity: 0;
-           position: fixed;
- //          data-container: body;
-           font-weight: normal;
-           color: black;
-           background-color: rgba( 255, 255, 0, .7);
-           z-index: 998;
-           font-size: 1.2vw;
-           text-shadow: none;
-           -webkit-border-radius: 7px;
-           -moz-border-radius: 7px;
-           -o-border-radius: 7px;
-           border-radius: 7px;
-           text-align: left;
-           padding: 10px;
-           margin: 0.5em 0.5em 2em;
-           width: 400px;
-        }
-
-
-        .field:hover .tooltip{
-           display: block;
-           opacity: 1;
-        }
-       
-        .axis .g-halo {
-           stroke: black;
-           stroke-width: 4px;
-           stroke-linecap: round;
-        }
-
-        .g-slider .g-handle path {
-           stroke: black;
-           stroke-width: 3px;
-           stroke-linecap: round;
-           pointer-events: none;
-        }
-
-        .g-slider .g-handle text {
-           fill: black;
-           font-size: 1.2vw;
-           font-weight: bold;
-        }
-  }
-	</style>
-
-
-	<script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-	<script src="http://www.worldwidetelescope.org/scripts/wwtsdk.aspx"></script>
-	<script>
-	  // declare global Worldwide Telescope object
-	  var wwt;
-	  // Create variables to hold the changeable settings
-	  var bShowCrosshairs = true;
-	  var bShowUI = true;
-	  var bShowFigures = true;
-	  // This function initializes the wwt object and once it is done
-	  // it fires the wwtReady event
-	  function initialize() {
-	     wwt = wwtlib.WWTControl.initControl("WWTCanvas");
-	     wwt.add_ready(wwtReady);
-	     // This ensures that events that would have fired before we registered them get fired
-	     wwt.endInit();
-	  }
-	  // This function is where you would put your custom code for WWT
-	  // following the initForWwt() call
-	  function wwtReady() {
-	     initForWwt();
-	  }
-	  // This is the initialization for Worldwide Telescope
-	  function initForWwt() {
-	     wwt.loadImageCollection("http://www.worldwidetelescope.org/COMPLETE/wwtcomplete.wtml");
-	     // add any wwt object settings changes here
-	     wwt.settings.set_showCrosshairs(bShowCrosshairs);
-	     wwt.settings.set_showConstellationFigures(bShowFigures);
-	     wwt.hideUI(!bShowUI);
-	  }
-	  // A function to change the view to different constellations
-	  // Note the fov set to 60 (maximum view distance)
-	  // This function is called from the button entries in the html table
-	  
-	  function GotoConstellation(d) {
-	     wwt.gotoRaDecZoom(d.ra*15, d.dec, d.zoom/2, false);
-	  }
-	</script>
+    </script>
 </head>
-<body style="background-color:white;">
-   <div class="container">
-      <h1 style="color:black;z-index: -1">Star Cluster Evolution</h1>
-      <div class="row">
-            <div class="col-md-12" id="slider" style="z-index: 10" ></div>
-      </div>
-      <div class="row" id="charts">
-         <div class="col-md-6">
-	    <div class="row" id="chart-h2">
-               <h2 id="chart-title" class="field" style="position:relative;">
-                  H-R diagram 
-	          <div class="tooltip"> 
-                     <em>H-R (or Hertzsprung-Russell) diagrams</em> of real star clusters are used by astronomers to study the stars' ages, distances and chemical compositions. <br>An H-R diagram plots the stellar surface temperatures (bluer is hotter and towards the left on the plot) against the stellar luminosities (brighter is towards the top of the plot). In these units our Sun has a surface temperature of about 5,800 Kelvin and a luminosity of 1.
-                 </div>
-	       </h2>
-	    </div>
-	    <div class="row" id="chart"></div>
-         </div>
-         <div class="col-md-2">
-	    <div class="row" id="chartmap-h2" style="width:150%;height:100%">
-	       <h2 id="chartmap-title" class="field" style="position:relative;">
-                  View in space
-                  <div class="tooltip">
-                     This plot is a projection of star positions in space and tracks the cluster as it orbits around the Galaxy. <br>In this simulation the Galactic center is towards the left of the screen, and the cluster's orbit is aligned roughly with the vertical direction.
-                  </div>
-               </h2>
-	    </div>
-	    <div class="row" id="chartmap"></div>
-         </div>
-         <div class="col-md-4">
-            <div class="row">
-               <div class="col-md-1">
-               </div>
-               <div class="col-md-11">
-	          <div class="row" id="WWT" style="color:black;width:100%;height:100%">
-	             <h2 id="WorldWideTelescopeControlHost" class="field" style="position:relative;">
-                     </h2>
-                  </div>
-	          <div class="row" id="WWT2">
-                     <div class="WWTclass"></div>
-                     <div id="WWTCanvas"></div>
-                  </div>
-               </div>
-	    </div>
-         </div>
-      </div>
-  
-
-      <div class="row">
-         <div class="col-md-8">
-            <div class="row" id="radiusLegend"></div>
-         </div>
-         <div class="col-md-12">
-            <div class="row" id="radiusLegend2"></div>
-	    <p style="color:red;width:100%;font-size:1vw;"> Click on a star to see its properties. At the end of the animation, mouseover the time axis to move forward and backwards through time or click on the orange tick labels of the time axis to explore a real cluster of a specific age.
-         </div>
-      </div> 
-   <svg width="0" height="0">
-      <defs>
-         <g id="mycross">
-             <rect x="-10" y="-1" width="20" height="2" />
-             <rect x="-1" y="-10"  width="2" height="20" />
-         </g>
-         <g id="my45cross">
-             <rect x="-10" y="-1" width="20" height="2" transform="rotate(45)" />
-             <rect x="-1" y="-10"  width="2" height="20" transform="rotate(45)"/>
-         </g>
-      </defs>
-   </svg>      
-      <p style="color:black;width:100%;font-size:1.2vw;"> 
-<br>
-Our Sun likely formed in a small cluster of stars that dissolved many years ago. Here you can interact with a computer simulation of a 100-star cluster similar to our Sun's birthplace, as it evolves in time from birth until the present day (at an age of 5 billion years). <br>
-<br>
-In the H-R diagram on the left, watch as the most luminous stars quickly evolve from the "main sequence" to become "giants". Indeed, all stars evolve in time, with the most massive 
-(and therefore most luminous) evolving most rapidly. You may also notice two different branches of main-sequence stars; the branch to the red (right) 
-on the plot is composed of binary stars - 2 stars bound by their own mutual gravity and orbiting each other, but unresolved from Earth at the distances 
-to most clusters.  Can you find other stars that don't follow the standard evolutionary sequence?  <br>
-<br>
-In the middle, you see the stars moving in space as the cluster orbits around the Galaxy. Watch as the cluster quickly dissolves under the tidal pull of our Galaxy and is drawn into a tight line, displaying "tidal tails" 
-similar to those observed in real dissolving star clusters. You may also notice neutron stars leaving the cluster early at high velocities, 
-due to large kicks imparted by the stars' very energetic supernovae explosions.  Our Sun likely escaped from its birth cluster like 
-the majority of the stars in this simulation: slowly and calmly, and eventually leaving its sibling to live out its life in isolation - which was good news for us!
-      </p>
-      <p style="color:grey;font-size:1vw;">Credits: This plot has been created using <a href="http://d3js.org/">D3</a> and has been inspired by <a href="http://bost.ocks.org/mike/nations/">http://bost.ocks.org/mike/nations/</a>. Also it uses <a href="http://www.worldwidetelescope.org/">the World Wide Telescope</a>. The data were simulated by Aaron M. Geller and visualized by Ester Pantaleo; the project was led by Mark SubbaRao. Source code is available <a href="https://github.com/esterpantaleo/planetarium-chicago"  target="_blank">here</a>.</p>
-   </div>
-<script>
+<body style="background-color:black;">
+    <div class="container">
+        <h1 style="color:yellow;">Star Cluster Evolution</h1>
+        <div class="row">
+            <div class="col-md-12" id="slider"></div>
+        </div>
+        <div class="row" id="charts">
+            <div class="col-md-6">
+	        <div class="row" id="chart-h2">
+                    <h2 id="chart-title" class="field" style="position:relative;color:yellow;">
+                        H-R diagram 
+	                <div class="tooltip"> 
+                            <em>H-R (or Hertzsprung-Russell) diagrams</em> of real star clusters are used by 
+                            astronomers to study the stars' ages, distances and chemical compositions. <br>
+                            An H-R diagram plots the stellar surface temperatures 
+                            (bluer is hotter and towards the left on the plot) against the stellar 
+                            luminosities (brighter is towards the top of the plot). In these units our Sun 
+                            has a surface temperature of about 5,800 Kelvin and a luminosity of 1.
+                        </div>
+                    </h2>
+	        </div>
+	        <div class="row" id="chart"></div>
+            </div>
+            <div class="col-md-2">
+	        <div class="row" id="chartmap-h2" style="width:150%;height:100%">
+	            <h2 id="chartmap-title" class="field" style="position:relative;color:yellow;">
+                        View in space
+                        <div class="tooltip">
+                            This plot is a projection of star positions in space and tracks the cluster as it 
+                            orbits around the Galaxy. <br>In this simulation the Galactic center is towards 
+                            the left of the screen, and the cluster's orbit is aligned roughly with the 
+                            vertical direction.
+                        </div>
+                    </h2>
+	        </div>
+	        <div class="row" id="chartmap"></div>
+            </div>
+            <div class="col-md-4">
+                <div class="row">
+                    <div class="col-md-1"></div>
+                    <div class="col-md-11">
+                        <div class="row" id="WWT" style="color:black;width:100%;height:100%;">
+	                    <h2 id="WorldWideTelescopeControlHost" class="field" style="position:relative;"></h2>
+                        </div>
+	                <div class="row" id="WWT2" style="margin-left=3px;color:yellow;">
+                            <div id="WWTCanvas"></div>
+                        </div>
+                    </div>
+	        </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row" id="radiusLegend"></div>
+            </div>
+            <div class="col-md-12">
+                <div class="row" id="radiusLegend2"></div>
+	        <p style="color:red;width:100%;font-size:1vw;"> 
+                    Mouseover the time axis to move forward and backwards through time.
+                    Click on a star to see its properties. Click on the orange tick labels of the 
+                    time axis to explore a real cluster of a specific age.
+                </p>
+            </div>
+        </div> 
+        <svg width="0" height="0">
+            <defs>
+                <g id="mycross">
+                    <rect x="-10" y="-1" width="20" height="2" />
+                    <rect x="-1" y="-10"  width="2" height="20" />
+                </g>
+                <g id="my45cross">
+                    <rect x="-10" y="-1" width="20" height="2" transform="rotate(45)" />
+                    <rect x="-1" y="-10"  width="2" height="20" transform="rotate(45)"/>
+                </g>
+            </defs>
+        </svg>      
+        <p style="color:white;width:100%;font-size:1.2vw;"> 
+            <br>Our Sun likely formed in a small cluster of stars that dissolved many years ago. Here you can 
+            interact with a computer simulation of a 100-star cluster similar to our Sun's birthplace, as it 
+            evolves in time from birth until the present day (at an age of 5 billion years). <br><br>In the H-R 
+            diagram on the left, watch as the most luminous stars quickly evolve from the "main sequence" to 
+            become "giants". Indeed, all stars evolve in time, with the most massive (and therefore most luminous) 
+            evolving most rapidly. You may also notice two different branches of main-sequence stars; the branch 
+            to the red (right) on the plot is composed of binary stars - 2 stars bound by their own mutual gravity 
+            and orbiting each other, but unresolved from Earth at the distances to most clusters. Can you find 
+            other stars that don't follow the standard evolutionary sequence?  <br><br>
+            In the middle, you see the stars moving in space as the cluster orbits around the Galaxy. Watch as 
+            the cluster quickly dissolves under the tidal pull of our Galaxy and is drawn into a tight line, 
+            displaying "tidal tails" similar to those observed in real dissolving star clusters. You may also notice 
+            neutron stars leaving the cluster early at high velocities, due to large kicks imparted by the stars' 
+            very energetic supernovae explosions.  Our Sun likely escaped from its birth cluster like the majority 
+            of the stars in this simulation: slowly and calmly, and eventually leaving its sibling to live out its 
+            life in isolation - which was good news for us!
+        </p>
+        <p style="color:grey;font-size:1vw;">
+            Credits: This plot has been created using <a href="http://d3js.org/">D3</a> and has been inspired by 
+            <a href="http://bost.ocks.org/mike/nations/">http://bost.ocks.org/mike/nations/</a>. Also it uses 
+            <a href="http://www.worldwidetelescope.org/">the World Wide Telescope</a>. Data was simulated 
+            by Aaron M. Geller and visualized by Ester Pantaleo; the project was led by Mark SubbaRao. Source 
+            code is available <a href="https://github.com/esterpantaleo/planetarium-chicago"  target="_blank">here</a>.
+        </p>
+    </div>
+    <script>
 
 // Various accessors that specify dimensions of data to visualize.
 function x(d) { return d.T; }
@@ -263,7 +163,7 @@ function color(d) { return d.T; }
 
 function type(d) { return d.type; }
 
-//some math functions
+// Some math functions
 function mylog10(num) {
     return Math.log(num) / Math.LN10;
 }
@@ -277,80 +177,88 @@ function sigFigs(n, sig) {
     return Math.round(n * mult) / mult;
 }
 
+// Add tooltip to WorldWideTelescope Window
+d3.select("#WorldWideTelescopeControlHost")
+    .append("br")
+    .attr("id", "WWTtooltip");
+d3.select("#WorldWideTelescopeControlHost")
+    .append("div")
+    .attr("class", "tooltip").html(printNote());
+
 function printNotePart() {
     return "Zoom in and out using the Page-Up and Page-Down keys, on your keyboard or the scroll wheel on your mouse. <br>Move your view by clicking and moving your mouse in the main window. <br>Also rotate the view by holding down the control key while you move your mouse." 
 }
 
 function printNote() {
- return "At the end of the animation, click on a cluster, i.e., on one of the <span style='color:orange;'>orange tick labels</span> on the time axis to <span style='color:orange;'>explore real images of stars</span> in this window. <br>" + printNotePart();
+    return "At the end of the animation, click on a cluster, i.e., on one of the <span style='font-weight:bold;'>orange tick labels</span> on the time axis to <span style='font-weight:bold;'>explore real images of stars</span> in this window. <br>" + printNotePart();
 }
 
-d3.select("#WorldWideTelescopeControlHost").append("br").attr("id", "WWTtooltip");
-d3.select("#WorldWideTelescopeControlHost").append("div").attr("class", "tooltip").html(printNote());
-//some definitions
-var myType = [ "Star", "White Dwarf", "Neutron Star", "Black Hole", "Super Nova"];
+
+// Some definitions
+var myType = [ "Star", 
+               "White Dwarf", 
+               "Neutron Star", 
+               "Black Hole", 
+               "Super Nova", 
+               "Binary Star! I am made of two main-sequence Stars", 
+               "Binary Star! I am made of two White Dwarves", 
+               "Binary Star! I am made of a main-sequence Star and a White Dwarf"];
 
 var myConstellations = [
-   {
-     'name':'M36',
-     'short':'M36',
-     'year':25,
-     'ra':5.60527847978064,
-     'dec':34.1408803040086,
-     'zoom':1.40625
-   },
-   {
-     'name':'Pleiades (M45)',
-     'short':'Pleiades',
-     'year':100,
-     'ra':3.78162999987739,
-     'dec':24.1759775344189,
-     'zoom':7.88748773438266
-   },
-   {
-     'name':'Wild Duck Cluster (M11)',
-     'short':'M11',
-     'year':250,
-     'ra':18.8516666666667,
-     'dec':-6.266666667,
-     'zoom':0.946913281232035
-   },
-   {
-     'name':'Hyades',
-     'short':'Hyades',
-     'year':625,
-     'ra':4.45450415246872,
-     'dec':15.9783772755398,
-     'zoom':30.4993246943675
-   },
-   {
-     'name':'NGC 2360',
-     'short':'NGC 2360',
-     'year':1000,
-     'ra':7.29530555333334,
-     'dec':-15.64138889,
-     'zoom':1.40625
-   },
-   {
-     'name':'NGC 752',
-     'short':'NGC 752',
-     'year':2000,
-     'ra':1.96330555533334,
-     'dec':37.85,
-     'zoom':1.40625
-   },
-   {
-     'name':'Messier 46',
-     'short':'Messier 46',
-     'year':4000,
-     'ra':7.69666666666667,
-     'dec':-14.81666667,
-     'zoom':1.70392547209487
-   }
-]
+    {
+        'name':'M36',
+        'short':'M36',
+        'year':25,
+        'ra':5.60527847978064,
+        'dec':34.1408803040086,
+        'zoom':1.40625
+    },{
+        'name':'Pleiades (M45)',
+        'short':'Pleiades',
+        'year':100,
+        'ra':3.78162999987739,
+        'dec':24.1759775344189,
+        'zoom':7.88748773438266
+    },{
+        'name':'Wild Duck Cluster (M11)',
+        'short':'M11',
+        'year':250,
+        'ra':18.8516666666667,
+        'dec':-6.266666667,
+        'zoom':0.946913281232035
+    },{
+        'name':'Hyades',
+        'short':'Hyades',
+        'year':625,
+        'ra':4.45450415246872,
+        'dec':15.9783772755398,
+        'zoom':30.4993246943675
+    },{
+        'name':'NGC 2360',
+        'short':'NGC 2360',
+        'year':1000,
+        'ra':7.29530555333334,
+        'dec':-15.64138889,
+        'zoom':1.40625
+    },{
+        'name':'NGC 752',
+        'short':'NGC 752',
+        'year':2000,
+        'ra':1.96330555533334,
+        'dec':37.85,
+        'zoom':1.40625
+    },{
+        'name':'Messier 46',
+        'short':'Messier 46',
+        'year':4000,
+        'ra':7.69666666666667,
+        'dec':-14.81666667,
+        'zoom':1.70392547209487
+    }
+];
 
 // colors palette
-var myCols = ["#ff3800","#ff5300","#ff6500","#ff7300","#ff7e00","#ff8912","#ff932c","#ff9d3f","#ffa54f","#ffad5e","#ffb46b","#ffbb78","#ffc184","#ffc78f","#ffcc99","#ffd1a3","#ffd5ad","#ffd9b6","#ffddbe","#ffe1c6","#ffe4ce","#ffe8d5","#ffebdc","#ffeee3","#fff0e9","#fff3ef","#fff5f5","#fff8fb","#fef9ff","#f9f6ff","#f5f3ff","#f0f1ff","#edefff","#e9edff","#e6ebff","#e3e9ff","#e0e7ff","#dde6ff","#dae4ff","#d8e3ff","#d6e1ff","#d3e0ff","#d1dfff","#cfddff","#cedcff","#ccdbff","#cadaff","#c9d9ff","#c7d8ff","#c6d8ff","#c4d7ff","#c3d6ff","#c2d5ff","#c1d4ff","#c0d4ff","#bfd3ff","#bed2ff","#bdd2ff","#bcd1ff","#bbd1ff","#bad0ff","#b9d0ff","#b8cfff","#b7cfff","#b7ceff","#b6ceff","#b5cdff","#b5cdff","#b4ccff","#b3ccff","#b3ccff","#b2cbff","#b2cbff","#b1caff","#b1caff","#b0caff","#afc9ff","#afc9ff","#afc9ff","#aec9ff","#aec8ff","#adc8ff","#adc8ff","#acc7ff","#acc7ff","#acc7ff","#abc7ff","#abc6ff","#aac6ff","#aac6ff","#aac6ff","#a9c6ff","#a9c5ff","#a9c5ff","#a9c5ff","#a8c5ff","#a8c5ff","#a8c4ff","#a7c4ff","#a7c4ff","#a7c4ff","#a7c4ff","#a6c3ff","#a6c3ff","#a6c3ff","#a6c3ff","#a5c3ff","#a5c3ff","#a5c3ff","#a5c2ff","#a4c2ff","#a4c2ff","#a4c2ff","#a4c2ff","#a4c2ff","#a3c2ff","#a3c1ff","#a3c1ff","#a3c1ff","#a3c1ff","#a3c1ff","#a2c1ff","#a2c1ff","#a2c1ff","#a2c1ff","#a2c0ff","#a2c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a0c0ff","#a0bfff","#a0bfff","#a0bfff","#a0bfff","#a0bfff","#a0bfff","#a0bfff","#9fbfff","#9fbfff","#9fbfff"]
+var myCols = ["#ff3800","#ff5300","#ff6500","#ff7300","#ff7e00","#ff8912","#ff932c","#ff9d3f","#ffa54f","#ffad5e","#ffb46b","#ffbb78","#ffc184","#ffc78f","#ffcc99","#ffd1a3","#ffd5ad","#ffd9b6","#ffddbe","#ffe1c6","#ffe4ce","#ffe8d5","#ffebdc","#ffeee3","#fff0e9","#fff3ef","#fff5f5","#fff8fb","#fef9ff","#f9f6ff","#f5f3ff","#f0f1ff","#edefff","#e9edff","#e6ebff","#e3e9ff","#e0e7ff","#dde6ff","#dae4ff","#d8e3ff","#d6e1ff","#d3e0ff","#d1dfff","#cfddff","#cedcff","#ccdbff","#cadaff","#c9d9ff","#c7d8ff","#c6d8ff","#c4d7ff","#c3d6ff","#c2d5ff","#c1d4ff","#c0d4ff","#bfd3ff","#bed2ff","#bdd2ff","#bcd1ff","#bbd1ff","#bad0ff","#b9d0ff","#b8cfff","#b7cfff","#b7ceff","#b6ceff","#b5cdff","#b5cdff","#b4ccff","#b3ccff","#b3ccff","#b2cbff","#b2cbff","#b1caff","#b1caff","#b0caff","#afc9ff","#afc9ff","#afc9ff","#aec9ff","#aec8ff","#adc8ff","#adc8ff","#acc7ff","#acc7ff","#acc7ff","#abc7ff","#abc6ff","#aac6ff","#aac6ff","#aac6ff","#a9c6ff","#a9c5ff","#a9c5ff","#a9c5ff","#a8c5ff","#a8c5ff","#a8c4ff","#a7c4ff","#a7c4ff","#a7c4ff","#a7c4ff","#a6c3ff","#a6c3ff","#a6c3ff","#a6c3ff","#a5c3ff","#a5c3ff","#a5c3ff","#a5c2ff","#a4c2ff","#a4c2ff","#a4c2ff","#a4c2ff","#a4c2ff","#a3c2ff","#a3c1ff","#a3c1ff","#a3c1ff","#a3c1ff","#a3c1ff","#a2c1ff","#a2c1ff","#a2c1ff","#a2c1ff","#a2c0ff","#a2c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a1c0ff","#a0c0ff","#a0bfff","#a0bfff","#a0bfff","#a0bfff","#a0bfff","#a0bfff","#a0bfff","#9fbfff","#9fbfff","#9fbfff"];
 
 // Chart dimensions.
 var myWidth = Math.ceil(document.getElementById('chart').clientWidth*2/3),
@@ -362,8 +270,8 @@ var myWidth = Math.ceil(document.getElementById('chart').clientWidth*2/3),
     maxTempScale = 29800, 
     maxXScale = 10000,
     minXScale = 2600,
-    mapXmin = -300,
-    mapXmax = 300,
+    mapXmin = -500,
+    mapXmax = 500,
     mapYmin = -500,
     mapYmax = 500;
 
@@ -378,8 +286,25 @@ var xScale = d3.scale.log().domain([maxXScale, minXScale]).range([0, widthPlot])
 // The x & y axes.
 var xAxis = d3.svg.axis().orient("bottom").scale(xScale).tickSize(0).tickValues([10000,5000,3000]).tickFormat(d3.format("g")),
     yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(0).tickValues([0.01,1,100,10000]).tickFormat(d3.format("g")),
-    mapxAxis = d3.svg.axis().orient("center").scale(mapxScale).tickSize(0).tickValues([]).tickFormat(d3.format("g")),
-    mapyAxis = d3.svg.axis().scale(mapyScale).orient("left").tickSize(0).tickValues([]).tickFormat(d3.format("g"));
+    //mapxAxis = d3.svg.axis().orient("center").scale(mapxScale).tickSize(0).tickValues([]).tickFormat(d3.format("g")),
+    //mapyAxis = d3.svg.axis().scale(mapyScale).orient("left").tickSize(0).tickValues([]).tickFormat(d3.format("g"));
+    mapxAxis = d3.svg.axis().orient("bottom").scale(mapxScale).tickPadding(10).ticks(4).tickSubdivide(true).tickFormat(d3.format("g")),
+mapyAxis = d3.svg.axis().scale(mapyScale).orient("left").tickPadding(10).ticks(4).tickSubdivide(true).tickFormat(d3.format("g"));
+
+
+var zoom = d3.behavior.zoom()
+    .center([myWidth/4,heightPlot/2])
+    .x(mapxScale)
+    .y(mapyScale)
+    .scaleExtent([0, 10])
+    .on("zoom", zoomed);	
+	
+function zoomed() {
+    mapSvg.select(".mapx.axis").call(mapxAxis);
+    mapSvg.select(".mapy.axis").call(mapyAxis);   
+    d3.selectAll(".myMapDot").attr("transform", function(d){return "translate(" + mapxScale(d.xcoord) + "," + mapyScale(d.ycoord) + ")"; });  
+}
+
 
 // Create the SVG container and set the origin.
 var svg = d3.select("#chart").append("svg")
@@ -393,7 +318,7 @@ var svg = d3.select("#chart").append("svg")
 svg.append("g")
     .attr("class", "x axis")
     .call(xAxis)
-    .attr("transform", "translate(0," + (heightPlot + heightPlot/25) + ")");
+    .attr("transform", "translate(0," + (heightPlot + heightPlot/22) + ")");
 
 svg.append("g")
     .attr("class", "y axis")
@@ -408,24 +333,6 @@ svg.append("text")
     .text("Temperature (Kelvin)")
     .style("font-size", "0.8vw");
 
-// Add the temperature legend
-var temperatureLegend = svg.append("g")
-    .attr("class", "temperature legend")
-
-temperatureLegend.append("text")
-    .attr("text-anchor", "left")
-    .attr("x", 0)
-    .attr("y", heightPlot + 2*myMargin.bottom/3)
-    .html("&larr; increasing temperature")
-    .style("font-size", "0.8vw");
-
-temperatureLegend.append("text")
-    .attr("text-anchor", "middle")
-    .attr("x", widthPlot - 1.6*myMargin.left )
-    .attr("y", heightPlot + 2*myMargin.bottom/3)
-    .html("decreasing temperature &rarr;")
-    .style("font-size", "0.8vw");
-
 svg.append("text")
     .attr("class", "y label")
     .attr("text-anchor", "middle")
@@ -435,6 +342,24 @@ svg.append("text")
     .attr("fill", "yellow")
     .attr("transform", "rotate(-90)")
     .text("Luminosity (Sun=1)")
+    .style("font-size", "0.8vw");
+
+// Add the temperature legend
+var temperatureLegend = svg.append("g")
+    .attr("class", "temperature legend")
+
+temperatureLegend.append("text")
+    .attr("text-anchor", "left")
+    .attr("x", 0)
+    .attr("y", heightPlot + 4*myMargin.bottom/5)
+    .html("&larr; increasing temperature")
+    .style("font-size", "0.8vw");
+
+temperatureLegend.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", widthPlot - 2.3*myMargin.left )
+    .attr("y", heightPlot + 4*myMargin.bottom/5)
+    .html("decreasing temperature &rarr;")
     .style("font-size", "0.8vw");
 
 // Add the color legend
@@ -485,31 +410,36 @@ var radiusLegend = d3.select("#radiusLegend").append("svg")
     .attr("transform", "translate(" + myMargin.left/2 + "," +  myMargin.top + ")")
     .attr("class", "radius legend")
  
-// Add the radius legend Title
 radiusLegend.append("text")
     .attr("text-anchor", "start")
-    .attr("x", myWidth/30)
+    .attr("x", 3*myWidth/30)
     .attr("y", 2*myHeight/30)
     .text("Radius")
     .style("font-size", "0.8vw");
 
 radiusLegend.append("text")
     .attr("text-anchor", "start")
-    .attr("x", myWidth/30)
+    .attr("x", 3*myWidth/30)
     .attr("y", 3*myHeight/30)
     .text("Scale")
     .style("font-size", "0.8vw");
 
-// Add the radius legend Circles
+radiusLegend.append("text")
+    .attr("text-anchor", "start")
+    .attr("x", 3*myWidth/30)
+    .attr("y", 4*myHeight/30)
+    .text("(Sun=1)")
+    .style("font-size", "0.8vw");
+
 radiusLegend.append("circle")
     .attr("fill", "#9fbfff")
-    .attr("cx", 6*myWidth/30)
+    .attr("cx", 7*myWidth/30)
     .attr("cy", 2.5*myHeight/30)
     .attr("r", radiusScale(0.1));
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
-    .attr("x", 6*myWidth/30)
+    .attr("x", 7*myWidth/30)
     .attr("y", 5.5*myHeight/30)
     .text("<0.1")
     .style("font-size", "0.8vw");
@@ -531,47 +461,58 @@ radiusLegend.append("circle")
     .attr("fill", "#9fbfff")
     .attr("cx", 12*myWidth/30)
     .attr("cy", 2.5*myHeight/30)
-    .attr("r", radiusScale(2));
+    .attr("r", radiusScale(3));
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
     .attr("x", 12*myWidth/30)
     .attr("y", 5.5*myHeight/30)
-    .text("2")
+    .text("3")
     .style("font-size", "0.8vw");
 
 radiusLegend.append("circle")
     .attr("fill", "#9fbfff")
-    .attr("cx", 18*myWidth/30)
+    .attr("cx", 17*myWidth/30)
     .attr("cy", 2.5*myHeight/30)
-    .attr("r", radiusScale(10));
+    .attr("r", radiusScale(5));
 
 radiusLegend.append("text")
     .attr("class", "radius legend")
     .attr("text-anchor", "middle")
-    .attr("x", 18*myWidth/30)
+    .attr("x", 17*myWidth/30)
     .attr("y", 5.5*myHeight/30)
-    .text("10")
+    .text("5")
     .style("font-size", "0.8vw");
 
-// Add the radius legend Type
 radiusLegend.append("text")
     .attr("text-anchor", "start")
-    .attr("x", 24*myWidth/30)
+    .attr("x", 23*myWidth/30)
     .attr("y", 2.5*myHeight/30)
     .text("Type")
     .style("font-size", "0.8vw");
 
-// Add the radius legend Circles
+radiusLegend.append("circle")
+    .attr("fill", "#9fbfff")
+    .attr("cx", 30*myWidth/30)
+    .attr("cy", 2.5*myHeight/30)
+    .attr("r", radiusScale(1));
+
+radiusLegend.append("text")
+    .attr("text-anchor", "middle")
+    .attr("x", 30*myWidth/30)
+    .attr("y", 4.5*myHeight/30)
+    .text("Main sequence Star")
+    .style("font-size", "0.8vw");
+
 radiusLegend.append("use")
     .attr("xlink:href", "#mycross")
     .attr("fill", "yellow")
-    .attr("x", 31*myWidth/30)
+    .attr("x", 37*myWidth/30)
     .attr("y", 2.5*myHeight/30);
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
-    .attr("x", 31*myWidth/30)
+    .attr("x", 37*myWidth/30)
     .attr("y", 4.5*myHeight/30)
     .text(myType[1])
     .style("font-size", "0.8vw");
@@ -579,24 +520,24 @@ radiusLegend.append("text")
 radiusLegend.append("use")
     .attr("xlink:href", "#mycross")
     .attr("fill", "green")
-    .attr("x", 39*myWidth/30)
+    .attr("x", 43*myWidth/30)
     .attr("y", 2.5*myHeight/30);
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
-    .attr("x", 39*myWidth/30)
+    .attr("x", 43*myWidth/30)
     .attr("y", 4.5*myHeight/30)
     .text(myType[2])
     .style("font-size", "0.8vw");
 radiusLegend.append("use")
     .attr("xlink:href", "#my45cross")
     .attr("fill", "yellow")
-    .attr("x", 47*myWidth/30)
+    .attr("x", 49*myWidth/30)
     .attr("y", 2.5*myHeight/30);
 
 radiusLegend.append("text")
     .attr("text-anchor", "middle")
-    .attr("x", 47*myWidth/30)
+    .attr("x", 49*myWidth/30)
     .attr("y", 4.5*myHeight/30)
     .text(myType[3])
     .style("font-size", "0.8vw");
@@ -604,13 +545,13 @@ radiusLegend.append("text")
 radiusLegend.append("use")
     .attr("xlink:href", "#my45cross")
     .attr("fill", "green")
-    .attr("x", 54*myWidth/30)
+    .attr("x", 55*myWidth/30)
     .attr("y", 2.5*myHeight/30);
 
 radiusLegend.append("text")
     .attr("class", "radius legend")
     .attr("text-anchor", "middle")
-    .attr("x", 54*myWidth/30)
+    .attr("x", 55*myWidth/30)
     .attr("y", 4.5*myHeight/30)
     .text(myType[4])
     .style("font-size", "0.8vw");
@@ -637,14 +578,19 @@ var myGrad = myDefs.selectAll(".gradient").data(myCols)
     .call(function(d) { return appendStops(d, this); });
 
 function printText(d, year) {
+    var myString;
     if (d.name == 100056) {
-        return "Hi, I evolve to become an exciting and exotic star known as a 'sub-subgiant' or 'red straggler'!  Actually I'm two stars in a binary, and while a sub-subgiant, my fainter star is eating mass from my brighter star. Yum! This loss of mass causes my brighter star to decrease in luminosity and leave behind its friends on the normal subgiant and giant branches.";
+        myString = "Hi, I evolve to become an exciting and exotic star known as a 'sub-subgiant' or 'red straggler'!  Actually I'm two stars in a binary, and while a sub-subgiant, my fainter star is eating mass from my brighter star. Yum! This loss of mass causes my brighter star to decrease in luminosity and leave behind its friends on the normal subgiant and giant branches. ";
     }else {
-        return "Hello! I'm a " + myType[d.type - 1] + "! I'm " + Math.round(5000*year/maxValue) + " years old. As time evolves, my properties change and therefore both my position in the H-R diagram and my position in space change. These are my current properties: <br><br>Temperature: " + Math.round(d.T) + " Kelvin<br>Luminosity: " + sigFigs(y(d), 3) + " solar<br>Mass: " + sigFigs(d.M, 3) + " solar<br>Radius: " + sigFigs(radius(d), 3) + " solar<br>X coordinate: " + Math.round(d.xcoord) + " arbitrary units<br>Y coordinate: " + Math.round(d.ycoord) + " arbitrary units.";
+        myString = "Hello! I'm a " + myType[d.type - 1] + "! I'm " + Math.round(5000*year/maxValue) + " million years old. As time evolves, my properties change and therefore both my position in the H-R diagram and my position in space change. "
     }
+    return myString + "These are my current properties: <br><br>Temperature: " + Math.round(d.T) + " Kelvin<br>Luminosity: " + sigFigs(y(d), 3) + " solar<br>Mass: " + sigFigs(d.M, 3) + " solar<br>Radius: " + sigFigs(radius(d), 3) + " solar<br>";
 }
 
 var mapSvg = d3.select("#chartmap").append("svg")
+    .call(zoom)
+    .on("dblclick.zoom", null)
+    .on("mousedown.zoom", null)
     .attr("width", myWidth/2)
     .attr("height", myHeight)
     .style("background-color", "black")
@@ -654,18 +600,39 @@ var mapSvg = d3.select("#chartmap").append("svg")
 mapSvg.append("g")
     .attr("class", "mapx axis")
     .call(mapxAxis)
-    .attr("transform", "translate(0," + (myHeight/2) + ")");
+    .attr("transform", "translate(0," + (heightPlot/2) + ")");
+
 mapSvg.append("g")
     .attr("class", "mapy axis")
     .call(mapyAxis)
     .attr("transform", "translate(" + myWidth/4  + ",0)"); 
 
+mapSvg.append("text")
+    .attr("class", "x label")
+    .attr("text-anchor", "middle")
+    .attr("x", 0.9*widthPlot/3)
+    .attr("y", 1.1*heightPlot)
+    .attr("fill", "yellow")
+    .text("x (parsecs)")
+    .style("font-size", "0.8vw");
+
+mapSvg.append("text")
+    .attr("class", "y label")
+    .attr("text-anchor", "middle")
+    .attr("x", -heightPlot/4)
+    .attr("y", 0)
+    .attr("dy", ".75em")
+    .attr("fill", "yellow")
+    .attr("transform", "rotate(-90)")
+    .text("y (parsecs)")
+    .style("font-size", "0.8vw");
+
+
 var brushHeight = myHeight/3,
     sliderSvg = d3.select("#slider").append("svg")
        .attr("id","brush")
-       .attr("style","z-index: 10")
        .attr("width", 3*myWidth)
-       .attr("height", brushHeight*3/4)
+       .attr("height", 1.1*brushHeight)
        .append("g"),
     minValue = 0,
     maxValue = 5005,
@@ -673,24 +640,24 @@ var brushHeight = myHeight/3,
     currentValue = 0,
     targetValue = 5005,
     sliderX = d3.scale.linear()
-       .domain([minValue, maxValue])
-       .range([0.1*myWidth, 2.1*myWidth])
-       .clamp(true),
+        .domain([minValue, maxValue])
+        .range([0.1*myWidth, 2.1*myWidth])
+        .clamp(true),
     gX = sliderSvg.append("g").attr("class", "x timeaxis")
-       .attr("transform", "translate(0," + brushHeight/3 + ")")
-       .call(d3.svg.axis()
-          .scale(sliderX)
-          .orient("top")
-          .tickFormat(function(t) { return Math.round(t); })
-          .tickPadding(7)
-          .tickValues(d3.range(minValue, maxValue, sliderStep)));
+        .attr("transform", "translate(0," + 0.5*brushHeight + ")")
+        .call(d3.svg.axis()
+            .scale(sliderX)
+            .orient("top")
+            .tickFormat(function(t) { return Math.round(t); })
+            .tickPadding(7)
+            .tickValues(d3.range(minValue, maxValue, sliderStep)));
 
 gX.select(".domain").select(function() {
             return this.parentNode.insertBefore(this.cloneNode(true), this);
             return this.parentNode.appendChild(this.cloneNode(true));
         }).attr("class", "g-halo");
-gX.selectAll(".tick text").attr("style","fill:black").attr("text-anchor", "middle");
-gX.selectAll(".tick line").attr("style","stroke:black");
+gX.selectAll(".tick text").attr("style","fill:yellow").attr("text-anchor", "middle");
+gX.selectAll(".tick line").attr("style","stroke:yellow");
 
 // Add an overlay for the year label.
 var myBox = d3.select(".domain").node().getBBox();
@@ -698,6 +665,12 @@ var myBox = d3.select(".domain").node().getBBox();
 // Load the data.
 var d3_target = null;
 d3.json("starscoord.json", function(stars) {
+    for (i=0;i<stars.length;i++){
+        stars[i].xcoord = stars[i].coord.map(function(value,index) { return [value[0],value[1]]; });
+        stars[i].ycoord	= stars[i].coord.map(function(value,index) { return [value[0],value[2]]; });
+        stars[i].coord=null;
+    }
+    console.log(stars);
     // A bisector since many star's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
 
@@ -705,17 +678,11 @@ d3.json("starscoord.json", function(stars) {
     var overlay = d3.select("#brush").append("rect") 
         .attr("class", "overlay")
         .attr("x", myBox.x)
-        .attr("y", myBox.y)
+        .attr("y", -0.4*myBox.y)
         .attr("text-anchor", "middle")
-        .attr("width", 0)
-        .attr("height", 0)
-        .attr("transform", "translate(0," + brushHeight/3 + ")")
-        .on("mouseover", enableInteraction);
-    d3.select(".overlay").transition()
-        .duration(0)
-        .delay(60000)
         .attr("width", myBox.width)
-        .attr("height", 4*myBox.height);
+        .attr("height", 10*myBox.height)
+        .on("mouseover", enableInteraction);
 
     // Interpolate data. Then add a dot and a mapDot per star and a tooltip for each star. 
     var interpolatedData = interpolateData(0);
@@ -725,7 +692,7 @@ d3.json("starscoord.json", function(stars) {
         .data(interpolatedData);
     var dotEnter = dot.enter();
     dotEnter.append("circle")
-         .filter(function(d) { return d.type==1; })
+         .filter(function(d) { return (d.type==1 || d.type==6 || d.type==8); })
          .attr("cx", function(d) { return xScale(x(d)); })
          .attr("cy", function(d) { return yScale(y(d)); })
          .attr("r", function(d) { return radiusScale(radius(d)); })
@@ -735,7 +702,7 @@ d3.json("starscoord.json", function(stars) {
          .sort(order);   
 
     dotEnter.append("use")
-        .filter(function(d) { return d.type!=1; })
+        .filter(function(d) { return (d.type!=1 && d.type!=6); })
         .attr("xlink:href", function(d) {
              if ((d.type == 3) || (d.type == 4)) { 
                  return "#my45cross"; 
@@ -746,7 +713,7 @@ d3.json("starscoord.json", function(stars) {
         .attr("x", function(d) { return xScale(x(d)); })
         .attr("y", function(d) { return yScale(y(d)); })
         .attr("fill", function(d) {
-             if ((d.type == 2) || (d.type == 4)) { 
+             if ((d.type == 2) || (d.type == 4) || (d.type == 7) || (d.type == 9)) { 
                  return "yellow"; 
              } else { 
                  return "green"; 
@@ -756,9 +723,9 @@ d3.json("starscoord.json", function(stars) {
         .attr("class", "myDot")
         .sort(order);
 
-function createSvgEl(name) {
-    return document.createElementNS('http://www.w3.org/2000/svg', name);
-}
+    function createSvgEl(name) {
+        return document.createElementNS('http://www.w3.org/2000/svg', name);
+    }
 
 
     var mapDot = mapSvg.append("g").attr("class", "myg")
@@ -766,7 +733,7 @@ function createSvgEl(name) {
         .data(interpolatedData);
     var mapDotEnter = mapDot.enter();
     mapDotEnter.append("circle")
-        .filter(function(d) { return d.type==1; })
+        .filter(function(d) { return (d.type==1 || d.type==6 || d.type==8); })
         .attr("cx", function(d) { return mapxScale(d.xcoord); })
         .attr("cy", function(d) { return mapyScale(d.ycoord); })
         .attr("r", function(d) { return radiusScale(radius(d)); })
@@ -775,16 +742,16 @@ function createSvgEl(name) {
         .attr("class", "myMapDot")
         .sort(order);
      mapDotEnter.append("use")
-        .filter(function(d) { return d.type!=1; })
+        .filter(function(d) { (d.type!=1 && d.type!=6); })
         .attr("xlink:href", function(d) {
-            if ((d.type == 3) || (d.type == 4)) { 
+            if ((d.type == 3) || (d.type == 4)) {
                 return "#my45cross"; 
             } else { 
                 return "#mycross"; 
             }
         })
         .attr("fill", function(d) {
-            if ((d.type == 2) || (d.type == 4)) { 
+            if ((d.type == 2) || (d.type == 4) || (d.type == 7) || (d.type == 9)) { 
                 return "yellow"; 
             } else { 
                 return "green"; 
@@ -804,38 +771,37 @@ function createSvgEl(name) {
             .style("position", "relative")
             .append("div")
             .attr("class", "cooltip");
-    //-----------------------DEFINE TRANSITION---------------------------------------------------
+    
+    // DEFINE THE TRANSITION
     // Start a transition that interpolates the data based on year.
     svg.transition()
-        .duration(60000)
+        .duration(10000)
         .ease("linear")
         .tween("year", tweenYear)
-        .each("end", enableInteraction) //this part is needed to visualize tooltips when animation is over
-        .call(endall, function() {
+        .each("end", enableInteraction);
+        //.call(endall, function() {//this part is needed to visualize tooltips when animation is over
             //update tooltip or hide tooltip if clicking on either charts outside of circle
-            d3.select("#charts").on("click", function(){
-                d3_target = d3.select(d3.event.target);
-                if (d3_target.classed("myMapDot") || d3_target.classed("myDot")) { 
-                    printTooltip(d3_target, maxValue);
-       	        } else {
-                    tooltip.style("display", "none").style("opacity", 0);
-                    d3_target = null;
-                }
-        })}); 
-    //--------------------------------------------------------------------------------------------
+            //d3.select("#charts").on("click", function(){
+              //  d3_target = d3.select(d3.event.target);
+                //if (d3_target.classed("myMapDot") || d3_target.classed("myDot")) { 
+                  //  printTooltip(d3_target, maxValue);
+       	   //     } else {
+             //       tooltip.style("display", "none").style("opacity", 0);
+               //     d3_target = null;
+                //}
+        //})}); 
+
     // Add time slider
     var gNewX = sliderSvg.append("g");
-    gNewX.transition().duration(100)
-        .delay(60000)
-        .attr("class", "x timeaxis")
-        .attr("transform", "translate(0," + brushHeight/3 + ")")
+    gNewX.attr("class", "x timeaxis")
+        .attr("transform", "translate(0," + 0.5*brushHeight + ")")
         .call(d3.svg.axis()
             .scale(sliderX)
             .orient("bottom")
             .tickValues(myConstellations.map(function(d){return d.year;}))
             .tickFormat(function(d,i){return myConstellations[i].short;}))
-        .attr("style", "stroke:orange")
-        .attr("style", "z-index: 999");
+        .attr("style", "stroke:orange");
+    
     gNewX.selectAll(".tick text")
         .attr("transform", "rotate(-65)")
         .attr("dx", "-.8em")
@@ -846,7 +812,8 @@ function createSvgEl(name) {
         .style("text-anchor", "end")
         .data(myConstellations)
         .on("click", clickMe);
-//modify this...
+    
+    //modify this...
     gNewX.selectAll(".tick text")
         .attr("position", "relative")
         .attr("class", "field")
@@ -856,12 +823,12 @@ function createSvgEl(name) {
         .html(function(d) {return "Click on me to see a " + d.year + " years old constellation (" + d.short + ") in the World Wide Telescope"; });
     gNewX.selectAll(".tick line").attr("style", "stroke:orange");
 
-    function endall(transition, callback) { 
-        if (transition.size() === 0) { callback() }
-        var n = 0; 
-        transition.each(function() { ++n; }) 
-            .each("end", function() { if (!--n) callback.apply(this, arguments); }); 
-    } 
+    //function endall(transition, callback) { 
+    //    if (transition.size() === 0) { callback() }
+    //    var n = 0; 
+    //    transition.each(function() { ++n; }) 
+    //        .each("end", function() { if (!--n) callback.apply(this, arguments); }); 
+    //} 
     
     // Updates the display to show the specified year.     
     function displayYear(year) {
@@ -874,7 +841,7 @@ function createSvgEl(name) {
         dot = svg.append("g").attr("class", "myg").selectAll(".myDot").data(interpolatedData, key);
         dotEnter = dot.enter();
         dotEnter.append("circle")
-            .filter(function(d) { return d.type==1; })
+            .filter(function(d) { return (d.type==1 || d.type==6 || d.type==8); })
             .attr("cx", function(d) { var l = xScale(x(d)); return isNaN(l) ? 0 : l; }) 
             .attr("cy", function(d) { var l = yScale(y(d)); return isNaN(l) ? 0 : l; })  
             .attr("r", function(d) { var l = radiusScale(radius(d)); return isNaN(l) ? 0 : l; })
@@ -884,7 +851,7 @@ function createSvgEl(name) {
             .sort(order);
 
         dotEnter.append("use")
-            .filter(function(d) { return d.type!=1; })
+            .filter(function(d) { return (d.type!=1 && d.type!=6); })
             .attr("xlink:href", function(d) {
                 if ((d.type == 3) || (d.type == 4)) { 
                     return "#my45cross"; 
@@ -893,7 +860,7 @@ function createSvgEl(name) {
                 }
             })
             .attr("fill", function(d) {
-                if ((d.type == 2) || (d.type == 4)) { 
+                if ((d.type == 2) || (d.type == 4) || (d.type == 7) || (d.type == 9)) { 
                     return "yellow"; 
                 } else { 
                     return "green"; 
@@ -911,7 +878,7 @@ function createSvgEl(name) {
         mapDot = mapSvg.append("g").attr("class", "myg").selectAll(".myMapDot").data(interpolatedData, key);
         mapDotEnter = mapDot.enter();
         mapDotEnter.append("circle")
-            .filter(function(d){ return (d.type == 1); })   
+            .filter(function(d){ return (d.type == 1 || d.type==6 || d.type==8); })   
             .attr("cx", function(d) { var l = mapxScale(d.xcoord); return isNaN(l) ? 0 : l; })
             .attr("cy", function(d) { var l = mapyScale(d.ycoord); return isNaN(l) ? 0 : l; })
             .attr("r", function(d) { var l = radiusScale(radius(d)); return isNaN(l) ? 0 : l; })
@@ -920,7 +887,7 @@ function createSvgEl(name) {
             .attr("class", "myMapDot")
             .sort(order);
         mapDotEnter.append("use")
-            .filter(function(d){ return (!(d.type == 1)); })
+            .filter(function(d){ return (d.type!=1 && d.type!=6);  })
             .attr("xlink:href", function(d) {
                 if ((d.type == 3) || (d.type == 4)) { 
                     return "#my45cross"; 
@@ -929,7 +896,7 @@ function createSvgEl(name) {
                 }
             })
             .attr("fill", function(d) {
-                 if (d.type == 2 || d.type == 4) { return "yellow"; } else { return "green"; }})
+                 if (d.type == 2 || d.type == 4 || (d.type == 7) || (d.type == 9)) { return "yellow"; } else { return "green"; }})
             .attr("x", function(d) { var l = mapxScale(d.xcoord); return isNaN(l) ? 0 : l; })
             .attr("y", function(d) { var l = mapyScale(d.ycoord); return isNaN(l) ? 0 : l; })
             .attr("visibility", function(d) { return d.visibility; })
@@ -964,7 +931,6 @@ function createSvgEl(name) {
             .select("text")
             .text(Math.round(5000*year/maxValue) + " million years old");
     }
-    //http://codepen.io/recursiev/pen/zpJxs
     //print tooltip, unless the user clicked outside of dot, i.e., unless d3_target == null
     function printTooltip(d3_target, year){
         if (d3_target){ //if d3_target != null i.e. you didn't click outside of dot
@@ -975,20 +941,26 @@ function createSvgEl(name) {
 
                  if (d3_target.classed("myMapDot")){
                       xTooltip = mapxScale(d.xcoord) + widthPlot;
-                      yTooltip = d3.min([70, mapyScale(d.ycoord)]);
+                      yTooltip = mapyScale(d.ycoord);//d3.min([70, mapyScale(d.ycoord)]);
                  } else if (d3_target.classed("myDot")){
                       xTooltip = 1.3 * xScale(x(d));
-                      yTooltip = d3.min([70, yScale(y(d))]);
+                      yTooltip = yScale(y(d));//d3.min([70, yScale(y(d))]);
                  }
                  tooltip.style("left", 1.3 * xTooltip + "px")
-                      .style("top", yTooltip + "px"); 
+                      .style("top", 1.1*yTooltip + "px"); 
              } else {
                  tooltip.style("display", "none").style("opacity", 0);
              }
         }
     }
 
-    d3.selectAll(".myDot").filter(function() {return d3.select(this).attr("cx")=="NaN";}).call(function(d, year){tooltip.style("display", "block").style("opacity", 1);tooltip.html("d.name="+d.name+" year"+year);});
+    d3.selectAll(".myDot")
+        .filter(function() {return d3.select(this).attr("cx")=="NaN";})
+        .call(function(d, year){ 
+                tooltip.style("display", "block")
+                    .style("opacity", 1);
+                tooltip.html("d.name="+d.name+" year"+year);
+            });
     function clickMe(d){
         d3.select("#WWTCanvas")
             .style("width", myWidth*9/10 + "px")
@@ -999,8 +971,11 @@ function createSvgEl(name) {
         d3.select("#WWTtooltip").remove();
         d3.select("#WorldWideTelescopeControlHost")
             .html("Telescope view of <span style='color:orange;'>" +  d.name)
+            .style("color", "yellow")
+            .style("text-align", "left")
             .append("div")
             .attr("class", "tooltip")
+            .attr("margin-left", "5px")
             .html(printNotePart()); 
     }
 
@@ -1020,6 +995,7 @@ function createSvgEl(name) {
 
         // Cancel the current transition, if any. 
         svg.transition().duration(0);
+        mapSvg.transition().duration(0);
 
         overlay.on("mousemove", mousemove) 
             .on("touchmove", mousemove); 
@@ -1027,6 +1003,7 @@ function createSvgEl(name) {
         function mousemove() {  
             displayYear(yearScale.invert(d3.mouse(this)[0]));
         }
+        //zoom.on("zoom", null);
     }
    
     // Interpolates the dataset for the given (fractional) year.
@@ -1037,8 +1014,7 @@ function createSvgEl(name) {
                     },-Infinity),
                 mymin=d.T.reduce(function(min, arr) {
                            return min <= arr[0] ? min : arr[0];
-                    },+Infinity),
-                xy = returnValuesXY(d.coord, year);
+                    },+Infinity);
             return {
                 name: d.name,
                 T: interpolateValues(d.T, year),
@@ -1046,8 +1022,8 @@ function createSvgEl(name) {
                 L: interpolateValues(d.L, year),
                 M: interpolateValues(d.M, year),
                 type: interpolateValues(d.type, year),
-                xcoord: xy.x,
-                ycoord: xy.y,
+                xcoord: interpolateValues(d.xcoord, year),
+                ycoord: interpolateValues(d.ycoord, year),
                 visibility: (year<mymin || year>mymax) ? "hidden" : "visible"
             };
         });
@@ -1064,24 +1040,8 @@ function createSvgEl(name) {
         }
         return a[1];
     }
-
-    function returnValuesXY(values, year){
-        var a;
-        for (i=0; i<values.length; i++){
-            a = values[i];
-            if (Math.floor(a[0]) == Math.floor(year))
-                return {
-                    x: a[1],
-                    y: a[2]
-                };
-        }
-        return {
-            x: year,
-            y: Math.floor(a[0])
-        };
-    }
  
-    //-----------------------ADD SLIDER--------------------------------------------------------------
+    // ADD SLIDER
     var brush = d3.svg.brush()
         .x(sliderX)
         .extent([0, 0])
@@ -1089,14 +1049,10 @@ function createSvgEl(name) {
         slider = sliderSvg.append("g").attr("class", "g-slider").call(brush);
     
     slider.selectAll(".extent,.resize").remove();
-    slider.select(".background")
-       .attr("height", 4.2*myBox.height)
-       .attr("width", 3*myWidth)
-       .attr("transform", "translate(0," + brushHeight/4 + ")");
-
+    
     var handle = slider.append("g").attr("class", "g-handle");
     handle.append("path")
-       .attr("transform", "translate(0," + brushHeight/3.2 + ")")
+       .attr("transform", "translate(0," + 0.4*brushHeight + ")")
        .attr("d", "M 0 -25 V 25");
     handle.append("text")
        .text(Math.round(minValue / maxValue * 5000) + " million years old")
@@ -1118,25 +1074,14 @@ function createSvgEl(name) {
         }
     }
 
-    function brushBackground() {
-        slider.select(".background")
-            .attr("x", -40)
-            .attr("width", myWidth + 40);
-    }
 });
-
-
-</script>
-
-<!--  This line is the start of a comment. Delete it to turn Google Analytics back on.
-<script>
-GoogleAnalyticsObject = "ga", ga = function() { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
-ga("create", "UA-48272912-3", "ocks.org");
-ga("send", "pageview");
-</script>
-
-<script async src="//www.google-analytics.com/analytics.js"></script>
-
-This line is the end of the comment. -->
-
+    </script>
+    <!--  This line is the start of a comment. Delete it to turn Google Analytics back on.
+    <script>
+        GoogleAnalyticsObject = "ga", ga = function() { ga.q.push(arguments); }, ga.q = [], ga.l = +new Date;
+        ga("create", "UA-48272912-3", "ocks.org");
+        ga("send", "pageview");
+    </script>
+    <script async src="//www.google-analytics.com/analytics.js"></script>
+    This line is the end of the comment. -->
 </body>
