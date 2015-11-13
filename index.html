@@ -670,7 +670,6 @@ d3.json("starscoord.json", function(stars) {
         stars[i].ycoord	= stars[i].coord.map(function(value,index) { return [value[0],value[2]]; });
         stars[i].coord=null;
     }
-    console.log(stars);
     // A bisector since many star's data is sparsely-defined.
     var bisect = d3.bisector(function(d) { return d[0]; });
 
@@ -775,7 +774,7 @@ d3.json("starscoord.json", function(stars) {
     // DEFINE THE TRANSITION
     // Start a transition that interpolates the data based on year.
     svg.transition()
-        .duration(10000)
+        .duration(50000)
         .ease("linear")
         .tween("year", tweenYear)
         .each("end", enableInteraction);
