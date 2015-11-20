@@ -75,9 +75,10 @@
                         View in space
                         <div class="tooltip">
                             This plot is a projection of star positions in space and tracks the cluster as it 
-                            orbits around the Galaxy. <br>In this simulation the Galactic center is towards 
-                            the left of the screen, and the cluster's orbit is aligned roughly with the 
-                            vertical direction.
+                            orbits around the Galaxy. <br>In this simulation 
+                            the Galactic center is towards the left of the screen, and the cluster's orbit is 
+                            aligned roughly with the vertical direction. <br>Pinch to zoom in or out. Note that the 
+                            star sizes are not to scale and are dramatically inflated for ease of viewing.
                         </div>
                     </h2>
 	        </div>
@@ -137,7 +138,7 @@
             displaying "tidal tails" similar to those observed in real dissolving star clusters. You may also notice 
             neutron stars leaving the cluster early at high velocities, due to large kicks imparted by the stars' 
             very energetic supernovae explosions.  Our Sun likely escaped from its birth cluster like the majority 
-            of the stars in this simulation: slowly and calmly, and eventually leaving its sibling to live out its 
+            of the stars in this simulation: slowly and calmly, and eventually leaving its siblings to live out its 
             life in isolation - which was good news for us!
         </p>
         <p style="color:grey;font-size:1vw;">
@@ -270,8 +271,8 @@ var myWidth = Math.ceil(document.getElementById('chart').clientWidth*2/3),
     maxTempScale = 29800, 
     maxXScale = 10000,
     minXScale = 2600,
-    mapXmin = -500,
-    mapXmax = 500,
+    mapXmin = -300,
+    mapXmax = 300,
     mapYmin = -500,
     mapYmax = 500;
 
@@ -286,23 +287,22 @@ var xScale = d3.scale.log().domain([maxXScale, minXScale]).range([0, widthPlot])
 // The x & y axes.
 var xAxis = d3.svg.axis().orient("bottom").scale(xScale).tickSize(0).tickValues([10000,5000,3000]).tickFormat(d3.format("g")),
     yAxis = d3.svg.axis().scale(yScale).orient("left").tickSize(0).tickValues([0.01,1,100,10000]).tickFormat(d3.format("g")),
-    //mapxAxis = d3.svg.axis().orient("center").scale(mapxScale).tickSize(0).tickValues([]).tickFormat(d3.format("g")),
-    //mapyAxis = d3.svg.axis().scale(mapyScale).orient("left").tickSize(0).tickValues([]).tickFormat(d3.format("g"));
     mapxAxis = d3.svg.axis().orient("bottom").scale(mapxScale).tickPadding(10).ticks(4).tickSubdivide(true).tickFormat(d3.format("g")),
-mapyAxis = d3.svg.axis().scale(mapyScale).orient("left").tickPadding(10).ticks(4).tickSubdivide(true).tickFormat(d3.format("g"));
+    mapyAxis = d3.svg.axis().scale(mapyScale).orient("left").tickPadding(10).ticks(4).tickSubdivide(true).tickFormat(d3.format("g"));
 
 
 var zoom = d3.behavior.zoom()
     .center([myWidth/4,heightPlot/2])
     .x(mapxScale)
     .y(mapyScale)
-    .scaleExtent([0, 10])
+    .scaleExtent([0, 150])
     .on("zoom", zoomed);	
 	
 function zoomed() {
     mapSvg.select(".mapx.axis").call(mapxAxis);
     mapSvg.select(".mapy.axis").call(mapyAxis);   
-    d3.selectAll(".myMapDot").attr("transform", function(d){return "translate(" + mapxScale(d.xcoord) + "," + mapyScale(d.ycoord) + ")"; });  
+    d3.selectAll(".myMapDot").attr("transform", "translate(" + d3.event.translate + ") scale(" + d3.event.scale + ")");
+    d3.selectAll(".myMapDot").attr("r", function(d) { return radiusScale(radius(d))/zoom.scale(); });
 }
 
 
@@ -471,6 +471,7 @@ radiusLegend.append("text")
     .style("font-size", "0.8vw");
 
 radiusLegend.append("circle")
+    .attr("id", "circle5")
     .attr("fill", "#9fbfff")
     .attr("cx", 17*myWidth/30)
     .attr("cy", 2.5*myHeight/30)
@@ -584,7 +585,7 @@ function printText(d, year) {
     }else {
         myString = "Hello! I'm a " + myType[d.type - 1] + "! I'm " + Math.round(5000*year/maxValue) + " million years old. As time evolves, my properties change and therefore both my position in the H-R diagram and my position in space change. "
     }
-    return myString + "These are my current properties: <br><br>Temperature: " + Math.round(d.T) + " Kelvin<br>Luminosity: " + sigFigs(y(d), 3) + " solar<br>Mass: " + sigFigs(d.M, 3) + " solar<br>Radius: " + sigFigs(radius(d), 3) + " solar<br>";
+    return myString + "These are my current properties: <br><br>Temperature: " + Math.round(d.T) + " Kelvin<br>Luminosity: " + sigFigs(y(d), 3) + " solar<br>Mass: " + sigFigs(d.M, 3) + " solar<br>Radius: " + sigFigs(radius(d), 3) + " solar";
 }
 
 var mapSvg = d3.select("#chartmap").append("svg")
@@ -778,17 +779,6 @@ d3.json("starscoord.json", function(stars) {
         .ease("linear")
         .tween("year", tweenYear)
         .each("end", enableInteraction);
-        //.call(endall, function() {//this part is needed to visualize tooltips when animation is over
-            //update tooltip or hide tooltip if clicking on either charts outside of circle
-            //d3.select("#charts").on("click", function(){
-              //  d3_target = d3.select(d3.event.target);
-                //if (d3_target.classed("myMapDot") || d3_target.classed("myDot")) { 
-                  //  printTooltip(d3_target, maxValue);
-       	   //     } else {
-             //       tooltip.style("display", "none").style("opacity", 0);
-               //     d3_target = null;
-                //}
-        //})}); 
 
     // Add time slider
     var gNewX = sliderSvg.append("g");
@@ -821,13 +811,6 @@ d3.json("starscoord.json", function(stars) {
         .attr("position", "absolute")
         .html(function(d) {return "Click on me to see a " + d.year + " years old constellation (" + d.short + ") in the World Wide Telescope"; });
     gNewX.selectAll(".tick line").attr("style", "stroke:orange");
-
-    //function endall(transition, callback) { 
-    //    if (transition.size() === 0) { callback() }
-    //    var n = 0; 
-    //    transition.each(function() { ++n; }) 
-    //        .each("end", function() { if (!--n) callback.apply(this, arguments); }); 
-    //} 
     
     // Updates the display to show the specified year.     
     function displayYear(year) {
@@ -1002,7 +985,6 @@ d3.json("starscoord.json", function(stars) {
         function mousemove() {  
             displayYear(yearScale.invert(d3.mouse(this)[0]));
         }
-        //zoom.on("zoom", null);
     }
    
     // Interpolates the dataset for the given (fractional) year.
@@ -1074,6 +1056,7 @@ d3.json("starscoord.json", function(stars) {
     }
 
 });
+
     </script>
     <!--  This line is the start of a comment. Delete it to turn Google Analytics back on.
     <script>
